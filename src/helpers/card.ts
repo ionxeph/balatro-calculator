@@ -20,7 +20,7 @@ export class Card {
     return this.id;
   }
 
-  getValue(): number {
+  getRank(): number {
     if (this.id !== 0 && this.id % 13 === 0) {
       return 13;
     }
