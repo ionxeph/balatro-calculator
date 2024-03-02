@@ -191,18 +191,6 @@ export class Hand {
     return this.handType;
   }
 
-  // TODO
-  getChips(): number {
-    let chips = 0;
-    this.ranks.forEach((rank) => {
-      // aces are 11 chips
-      if (rank === 1) {
-        chips += 11;
-      }
-    });
-    return chips;
-  }
-
   getHighestRankRepeat(): number {
     let highest = 0;
     Object.keys(this.rankCount).forEach((rank) => {
