@@ -17,4 +17,14 @@ const baseChipsAndMult = new Map<HandType, [number, number]>([
   ['High Card', [5, 1]],
 ]);
 
-export function getScore(hand: Hand) {}
+// returns [chips, mult, total]
+export function getScore(hand: Hand): [number, number, number] {
+  let [chips, mult] = baseChipsAndMult.get(hand.getHandType()) as [
+    number,
+    number
+  ];
+  hand.getScoringCards().forEach((card) => {
+    chips += card.getChips();
+  });
+  return [chips, mult, chips * mult];
+}

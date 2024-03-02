@@ -17,7 +17,6 @@ export type HandType =
 
 export class Hand {
   cards: Card[];
-  // scoredCards: Card[];
   ranks: number[] = [];
   suitsCount: { [key: string]: number } = {
     spades: 0,
@@ -66,8 +65,67 @@ export class Hand {
     this.handType = this.calculateHandType();
   }
 
-  // TODO
-  setScoringCards() {}
+  getScoringCards(): Card[] {
+    let scoringCards: Card[] = [];
+    const getScoringRankByRepeatedRank = (
+      numberOfRepeats: number,
+      multiple = false
+    ): number | number[] => {
+      let scoringRank: number[] = [];
+      Object.keys(this.rankCount).forEach((rank) => {
+        if (this.rankCount[+rank] === numberOfRepeats) {
+          scoringRank.push(+rank);
+        }
+      });
+      return multiple ? scoringRank : scoringRank[0];
+    };
+    switch (this.handType) {
+      case 'Flush Five':
+      case 'Flush House':
+      case 'Five of a Kind':
+      case 'Royal Flush':
+      case 'Straight Flush':
+      case 'Flush':
+      case 'Full House':
+      case 'Straight':
+        return this.cards;
+      case 'Four of a Kind':
+        scoringCards = this.cards.filter(
+          (card) => card.getRank() === getScoringRankByRepeatedRank(4)
+        );
+        break;
+      case 'Three of a Kind':
+        scoringCards = this.cards.filter(
+          (card) => card.getRank() === getScoringRankByRepeatedRank(3)
+        );
+        break;
+      case 'Two Pair':
+        scoringCards = this.cards.filter((card) =>
+          (getScoringRankByRepeatedRank(2, true) as number[]).includes(
+            card.getRank()
+          )
+        );
+        break;
+      case 'Pair':
+        scoringCards = this.cards.filter(
+          (card) => card.getRank() === getScoringRankByRepeatedRank(2)
+        );
+        break;
+      case 'High Card':
+        scoringCards = [
+          this.cards
+            .filter((card) => card.id !== 0)
+            .sort((a, b) => b.getChips() - a.getChips())[0],
+        ];
+        break;
+    }
+    this.cards.forEach((card) => {
+      if (card.getChips() === 50) {
+        scoringCards.push(card);
+      }
+    });
+    return scoringCards;
+  }
 
   calculateHandType(): HandType {
     const isFlush = this.isFlush();
@@ -148,6 +206,9 @@ export class Hand {
   getHighestRankRepeat(): number {
     let highest = 0;
     Object.keys(this.rankCount).forEach((rank) => {
+      if (+rank === 0) {
+        return;
+      }
       if (this.rankCount[+rank] > highest) {
         highest = this.rankCount[+rank];
       }
@@ -185,11 +246,11 @@ export class Hand {
       let consecutive = 0;
       if (rank === 1) {
         // treat ace as "14"
-        consecutive = checkConsecutive(14, 1, this.ranks);
+        consecutive = checkConsecutive(14, 0, this.ranks);
       } else if (rank < 5) {
         consecutive = 0;
       } else {
-        consecutive = checkConsecutive(rank, 1, this.ranks);
+        consecutive = checkConsecutive(rank, 0, this.ranks);
       }
       if (consecutive > longest) {
         longest = consecutive;
@@ -218,7 +279,7 @@ export class Hand {
   }
 
   isFlush(): boolean {
-    if (this.cards.length < 5) {
+    if (this.cards.length < 5 || this.suitsCount.stone > 0) {
       return false;
     }
     let numberOfUniqueSuits = 0;

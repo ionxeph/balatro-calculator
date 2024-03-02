@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import { Card } from './helpers/card';
 import { Hand } from './helpers/hand';
+import { getScore } from './helpers/score';
 
 function App() {
   const [hand, setHand] = useState<Hand>();
@@ -12,6 +13,7 @@ function App() {
         onClick={() => {
           console.log('=== new hand ===');
           const nbrOfCards = Math.floor(Math.random() * 5) + 1;
+          // const nbrOfCards = 5;
           const cardsInHand = [];
           for (let i = 0; i < nbrOfCards; i++) {
             const card = new Card(Math.floor(Math.random() * 53));
@@ -24,11 +26,11 @@ function App() {
 
           // setHand(
           //   new Hand([
-          //     new Card(10),
-          //     new Card(14),
-          //     new Card(4),
-          //     new Card(27),
-          //     new Card(14),
+          //     new Card(6),
+          //     new Card(37),
+          //     new Card(18),
+          //     new Card(25),
+          //     new Card(30),
           //   ])
           // );
         }}
@@ -54,6 +56,11 @@ function App() {
 
           <p>Hand type</p>
           <p>{hand.getHandType()}</p>
+
+          <p>Hand score</p>
+          <p>{`${getScore(hand)[0]} * ${getScore(hand)[1]} = ${
+            getScore(hand)[2]
+          }`}</p>
         </div>
       )}
     </>
