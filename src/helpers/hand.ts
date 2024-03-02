@@ -17,6 +17,7 @@ export type HandType =
 
 export class Hand {
   cards: Card[];
+  // scoredCards: Card[];
   ranks: number[] = [];
   suitsCount: { [key: string]: number } = {
     spades: 0,
@@ -42,6 +43,7 @@ export class Hand {
     13: 0,
   };
   highestRankRepeat = 0;
+  handType: HandType = 'High Card';
 
   constructor(cards: Card[]) {
     this.cards = cards;
@@ -61,9 +63,13 @@ export class Hand {
     });
     this.ranks = this.cards.map((card) => card.getRank());
     this.highestRankRepeat = this.getHighestRankRepeat();
+    this.handType = this.calculateHandType();
   }
 
-  getHandType(): HandType {
+  // TODO
+  setScoringCards() {}
+
+  calculateHandType(): HandType {
     const isFlush = this.isFlush();
 
     if (this.highestRankRepeat === 5) {
@@ -121,6 +127,22 @@ export class Hand {
     }
 
     return 'High Card';
+  }
+
+  getHandType(): HandType {
+    return this.handType;
+  }
+
+  // TODO
+  getChips(): number {
+    let chips = 0;
+    this.ranks.forEach((rank) => {
+      // aces are 11 chips
+      if (rank === 1) {
+        chips += 11;
+      }
+    });
+    return chips;
   }
 
   getHighestRankRepeat(): number {

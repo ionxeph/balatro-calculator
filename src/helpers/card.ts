@@ -43,4 +43,17 @@ export class Card {
     }
     return 'diamonds';
   }
+
+  getChips(): number {
+    const rank = this.getRank();
+    if (rank === 0) {
+      return 50;
+    } else if (rank === 1) {
+      return 11;
+    } else if (rank > 10) {
+      return 10;
+    } else {
+      return rank;
+    }
+  }
 }
