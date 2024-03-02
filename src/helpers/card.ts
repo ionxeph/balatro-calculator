@@ -16,6 +16,10 @@ export class Card {
     this.id = id;
   }
 
+  getId(): number {
+    return this.id;
+  }
+
   getValue(): number {
     if (this.id !== 0 && this.id % 13 === 0) {
       return 13;
