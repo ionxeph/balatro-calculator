@@ -1,5 +1,5 @@
 export type Suit = 'spades' | 'hearts' | 'clubs' | 'diamonds' | 'stone';
-export class Card {
+export class PokerCard {
   // 0 to 52
   // 0 is stone card
   // 1 is ace of spades

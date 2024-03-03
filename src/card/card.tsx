@@ -1,6 +1,6 @@
-import { Card as CardClass } from '../helpers/card';
+import { PokerCard } from '../helpers/poker-card';
 
-function getImageName(card: CardClass): string {
+function getImageName(card: PokerCard): string {
   const suit = card.getSuit();
   const rank = card.getRank();
   switch (rank) {
@@ -19,10 +19,10 @@ function getImageName(card: CardClass): string {
   }
 }
 
-function Card({ card }: { card: CardClass }) {
+function Card({ card }: { card: PokerCard }) {
   return (
     <>
-      <img height="128" src={`./card-images/${getImageName(card)}`} />
+      <img src={`./card-images/${getImageName(card)}`} />
     </>
   );
 }

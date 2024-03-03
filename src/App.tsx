@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import './App.css';
-import { Card as CardClass } from './helpers/card';
+import { PokerCard } from './helpers/poker-card';
 import { Hand } from './helpers/hand';
 import { getScore } from './helpers/score';
 import Card from './card/card';
@@ -10,38 +9,59 @@ function App() {
 
   return (
     <>
-      <button
+      <div className="grid grid-cols-5">
+        {hand &&
+          hand.cards.map((card, i) => {
+            return (
+              <div key={i} className="rounded-md overflow-hidden">
+                <Card card={card} />
+              </div>
+            );
+          })}
+        {new Array(5 - (hand ? hand.cards.length : 0)).fill(0).map((_, i) => (
+          <button
+            key={i}
+            className="text-white border-solid border-2 rounded-md"
+            onClick={() => {
+              const cards = hand ? hand.cards : [];
+              // const card = new PokerCard(Math.floor(Math.random() * 53));
+              const card = new PokerCard(0);
+              cards.push(card);
+              setHand(new Hand(cards));
+            }}
+          >
+            Add card
+          </button>
+        ))}
+      </div>
+
+      {/* <button
+        className="text-white border-white p-5 border-solid border-2 rounded-md"
         onClick={() => {
-          console.log('=== new hand ===');
           const nbrOfCards = Math.floor(Math.random() * 5) + 1;
           // const nbrOfCards = 5;
           const cardsInHand = [];
           for (let i = 0; i < nbrOfCards; i++) {
-            const card = new CardClass(Math.floor(Math.random() * 53));
+            const card = new PokerCard(Math.floor(Math.random() * 53));
             cardsInHand.push(card);
           }
           setHand(new Hand(cardsInHand));
 
-          // setHand(
-          //   new Hand([
-          //     new Card(6),
-          //     new Card(37),
-          //     new Card(18),
-          //     new Card(25),
-          //     new Card(30),
-          //   ])
-          // );
+          setHand(
+            new Hand([
+              new PokerCard(6),
+              new PokerCard(0),
+              new PokerCard(18),
+              new PokerCard(25),
+              new PokerCard(30),
+            ])
+          );
         }}
       >
         New Random hand
-      </button>
+      </button> */}
       {hand && (
         <div>
-          <p>Cards</p>
-          {hand.cards.map((card, i) => {
-            return <Card key={i} card={card} />;
-          })}
-
           <p>Suits</p>
           {['spades', 'hearts', 'clubs', 'diamonds'].map((suit, i) => {
             const suitsCount = hand.getSuitsCount() as any;

@@ -1,4 +1,4 @@
-import { Card } from './card';
+import { PokerCard } from './poker-card';
 
 export type HandType =
   | 'Flush Five'
@@ -16,7 +16,7 @@ export type HandType =
   | 'High Card';
 
 export class Hand {
-  cards: Card[];
+  cards: PokerCard[];
   ranks: number[] = [];
   suitsCount: { [key: string]: number } = {
     spades: 0,
@@ -44,12 +44,12 @@ export class Hand {
   highestRankRepeat = 0;
   handType: HandType = 'High Card';
 
-  constructor(cards: Card[]) {
+  constructor(cards: PokerCard[]) {
     this.cards = cards;
     this.init();
   }
 
-  setHand(cards: Card[]) {
+  setHand(cards: PokerCard[]) {
     this.cards = cards;
     this.init();
   }
@@ -65,8 +65,8 @@ export class Hand {
     this.handType = this.calculateHandType();
   }
 
-  getScoringCards(): Card[] {
-    let scoringCards: Card[] = [];
+  getScoringCards(): PokerCard[] {
+    let scoringCards: PokerCard[] = [];
     const getScoringRankByRepeatedRank = (
       numberOfRepeats: number,
       multiple = false
@@ -112,11 +112,12 @@ export class Hand {
         );
         break;
       case 'High Card':
-        scoringCards = [
-          this.cards
-            .filter((card) => card.id !== 0)
-            .sort((a, b) => b.getChips() - a.getChips())[0],
-        ];
+        const filteredHighCard = this.cards
+          .filter((card) => card.id !== 0)
+          .sort((a, b) => b.getChips() - a.getChips())[0];
+        if (filteredHighCard) {
+          scoringCards.push(filteredHighCard);
+        }
         break;
     }
     this.cards.forEach((card) => {
