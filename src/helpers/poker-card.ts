@@ -56,4 +56,23 @@ export class PokerCard {
       return rank;
     }
   }
+
+  getImageName(): string {
+    const suit = this.getSuit();
+    const rank = this.getRank();
+    switch (rank) {
+      case 0:
+        return 'stone.webp';
+      case 1:
+        return `ace_of_${suit}.svg`;
+      case 11:
+        return `jack_of_${suit}.svg`;
+      case 12:
+        return `queen_of_${suit}.svg`;
+      case 13:
+        return `king_of_${suit}.svg`;
+      default:
+        return `${rank}_of_${suit}.svg`;
+    }
+  }
 }

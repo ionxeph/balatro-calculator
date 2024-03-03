@@ -3,9 +3,11 @@ import { PokerCard } from './helpers/poker-card';
 import { Hand } from './helpers/hand';
 import { getScore } from './helpers/score';
 import Card from './card/card';
+import CardSelector from './card-selector/card-selector';
 
 function App() {
   const [hand, setHand] = useState<Hand>();
+  const [selectorOpen, setSelectorOpen] = useState(false);
 
   return (
     <>
@@ -13,26 +15,32 @@ function App() {
         {hand &&
           hand.cards.map((card, i) => {
             return (
-              <div key={i} className="rounded-md overflow-hidden">
+              <button key={i} className="rounded-md overflow-hidden">
                 <Card card={card} />
-              </div>
+              </button>
             );
           })}
         {(hand === undefined || hand.cards.length < 5) && (
           <button
             className="text-white border-solid border-2 rounded-md"
             onClick={() => {
-              const cards = hand ? hand.cards : [];
-              const card = new PokerCard(Math.floor(Math.random() * 53));
-              // const card = new PokerCard(0);
-              cards.push(card);
-              setHand(new Hand(cards));
+              setSelectorOpen(true);
             }}
           >
             Add card
           </button>
         )}
       </div>
+
+      <CardSelector
+        open={selectorOpen}
+        onSelect={(card: PokerCard) => {
+          setSelectorOpen(false);
+          const cards = hand ? hand.cards : [];
+          cards.push(card);
+          setHand(new Hand(cards));
+        }}
+      />
 
       {/* <button
         className="text-white border-white p-5 border-solid border-2 rounded-md"
