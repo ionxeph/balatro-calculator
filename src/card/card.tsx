@@ -3,7 +3,7 @@ import { PokerCard } from '../helpers/poker-card';
 function Card({ card }: { card: PokerCard }) {
   return (
     <>
-      <img src={`./card-images/${card.getImageName()}`} />
+      <img className="m-auto" src={`./card-images/${card.getImageName()}`} />
     </>
   );
 }

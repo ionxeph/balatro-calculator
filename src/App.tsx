@@ -15,8 +15,18 @@ function App() {
         {hand &&
           hand.cards.map((card, i) => {
             return (
-              <button key={i} className="rounded-md overflow-hidden">
+              <button
+                key={i}
+                className="group rounded-md overflow-hidden relative text-center"
+                onClick={() => {
+                  const cards = hand.cards.filter((_, index) => index !== i);
+                  setHand(new Hand(cards));
+                }}
+              >
                 <Card card={card} />
+                <div className="hidden absolute top-0 w-full h-full bg-red-400 opacity-70 group-hover:table">
+                  <span className="table-cell align-middle">DELETE</span>
+                </div>
               </button>
             );
           })}
