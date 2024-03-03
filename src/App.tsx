@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      <div className="grid grid-cols-5">
+      <div className="grid grid-cols-5 h-40">
         {hand &&
           hand.cards.map((card, i) => {
             return (
@@ -18,21 +18,20 @@ function App() {
               </div>
             );
           })}
-        {new Array(5 - (hand ? hand.cards.length : 0)).fill(0).map((_, i) => (
+        {(hand === undefined || hand.cards.length < 5) && (
           <button
-            key={i}
             className="text-white border-solid border-2 rounded-md"
             onClick={() => {
               const cards = hand ? hand.cards : [];
-              // const card = new PokerCard(Math.floor(Math.random() * 53));
-              const card = new PokerCard(0);
+              const card = new PokerCard(Math.floor(Math.random() * 53));
+              // const card = new PokerCard(0);
               cards.push(card);
               setHand(new Hand(cards));
             }}
           >
             Add card
           </button>
-        ))}
+        )}
       </div>
 
       {/* <button
