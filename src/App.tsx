@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import './App.css';
-import { Card } from './helpers/card';
+import { Card as CardClass } from './helpers/card';
 import { Hand } from './helpers/hand';
 import { getScore } from './helpers/score';
+import Card from './card/card';
 
 function App() {
   const [hand, setHand] = useState<Hand>();
@@ -16,11 +17,8 @@ function App() {
           // const nbrOfCards = 5;
           const cardsInHand = [];
           for (let i = 0; i < nbrOfCards; i++) {
-            const card = new Card(Math.floor(Math.random() * 53));
+            const card = new CardClass(Math.floor(Math.random() * 53));
             cardsInHand.push(card);
-            console.log(
-              `${card.getId()} = ${card.getSuit()} ${card.getRank()}`
-            );
           }
           setHand(new Hand(cardsInHand));
 
@@ -39,6 +37,11 @@ function App() {
       </button>
       {hand && (
         <div>
+          <p>Cards</p>
+          {hand.cards.map((card, i) => {
+            return <Card key={i} card={card} />;
+          })}
+
           <p>Suits</p>
           {['spades', 'hearts', 'clubs', 'diamonds'].map((suit, i) => {
             const suitsCount = hand.getSuitsCount() as any;
