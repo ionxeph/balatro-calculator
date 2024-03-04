@@ -7,6 +7,7 @@ export class PokerCard {
   // etc.
   // suits order is spades -> hearts -> clubs -> diamonds
   id: number;
+  isScoring = false;
 
   constructor(id: number) {
     this.id = id;
@@ -14,10 +15,6 @@ export class PokerCard {
 
   setId(id: number) {
     this.id = id;
-  }
-
-  getId(): number {
-    return this.id;
   }
 
   getRank(): number {

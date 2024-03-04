@@ -15,9 +15,9 @@ function App() {
         {hand && (
           <>
             <p className="text-5xl mb-3">{hand.getHandType()}</p>
-            <p className="text-6xl">{`${getScore(hand)[0]} * ${
+            <p className="text-6xl">{`${getScore(hand)[0]} = ${
               getScore(hand)[1]
-            } = ${getScore(hand)[2]}`}</p>
+            }`}</p>
           </>
         )}
       </div>

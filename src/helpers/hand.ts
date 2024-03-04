@@ -63,10 +63,16 @@ export class Hand {
     this.ranks = this.cards.map((card) => card.getRank());
     this.highestRankRepeat = this.getHighestRankRepeat();
     this.handType = this.calculateHandType();
+    this.setScoringCards();
   }
 
-  getScoringCards(): PokerCard[] {
-    let scoringCards: PokerCard[] = [];
+  setScoringCards() {
+    this.cards.forEach((card) => {
+      card.isScoring = false;
+      if (card.id === 0) {
+        card.isScoring = true;
+      }
+    });
     const getScoringRankByRepeatedRank = (
       numberOfRepeats: number,
       multiple = false
@@ -88,44 +94,53 @@ export class Hand {
       case 'Flush':
       case 'Full House':
       case 'Straight':
-        return this.cards;
+        this.cards.forEach((card) => (card.isScoring = true));
+        break;
       case 'Four of a Kind':
-        scoringCards = this.cards.filter(
-          (card) => card.getRank() === getScoringRankByRepeatedRank(4)
-        );
+        this.cards.forEach((card) => {
+          if (card.getRank() === getScoringRankByRepeatedRank(4)) {
+            card.isScoring = true;
+          }
+        });
         break;
       case 'Three of a Kind':
-        scoringCards = this.cards.filter(
-          (card) => card.getRank() === getScoringRankByRepeatedRank(3)
-        );
+        this.cards.forEach((card) => {
+          if (card.getRank() === getScoringRankByRepeatedRank(3)) {
+            card.isScoring = true;
+          }
+        });
         break;
       case 'Two Pair':
-        scoringCards = this.cards.filter((card) =>
-          (getScoringRankByRepeatedRank(2, true) as number[]).includes(
-            card.getRank()
-          )
-        );
+        this.cards.forEach((card) => {
+          if (
+            (getScoringRankByRepeatedRank(2, true) as number[]).includes(
+              card.getRank()
+            )
+          ) {
+            card.isScoring = true;
+          }
+        });
         break;
       case 'Pair':
-        scoringCards = this.cards.filter(
-          (card) => card.getRank() === getScoringRankByRepeatedRank(2)
-        );
+        this.cards.forEach((card) => {
+          if (card.getRank() === getScoringRankByRepeatedRank(2)) {
+            card.isScoring = true;
+          }
+        });
         break;
       case 'High Card':
-        const filteredHighCard = this.cards
-          .filter((card) => card.id !== 0)
-          .sort((a, b) => b.getChips() - a.getChips())[0];
-        if (filteredHighCard) {
-          scoringCards.push(filteredHighCard);
-        }
+        let currentHighCard = 0;
+        let highCardIndex = 0;
+        this.cards.forEach((card, i) => {
+          const cardRank = card.getRank() === 1 ? 14 : card.getRank();
+          if (cardRank > currentHighCard) {
+            currentHighCard = cardRank;
+            highCardIndex = i;
+          }
+        });
+        this.cards[highCardIndex].isScoring = true;
         break;
     }
-    this.cards.forEach((card) => {
-      if (card.getChips() === 50) {
-        scoringCards.push(card);
-      }
-    });
-    return scoringCards;
   }
 
   calculateHandType(): HandType {
