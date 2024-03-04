@@ -10,7 +10,17 @@ function App() {
   const [selectorOpen, setSelectorOpen] = useState(false);
 
   return (
-    <>
+    <div>
+      <div className="text-white h-40 mb-10 text-center">
+        {hand && (
+          <>
+            <p className="text-5xl mb-3">{hand.getHandType()}</p>
+            <p className="text-6xl">{`${getScore(hand)[0]} * ${
+              getScore(hand)[1]
+            } = ${getScore(hand)[2]}`}</p>
+          </>
+        )}
+      </div>
       <div className="grid grid-cols-5 h-40">
         {hand &&
           hand.cards.map((card, i) => {
@@ -51,59 +61,7 @@ function App() {
           setHand(new Hand(cards));
         }}
       />
-
-      {/* <button
-        className="text-white border-white p-5 border-solid border-2 rounded-md"
-        onClick={() => {
-          const nbrOfCards = Math.floor(Math.random() * 5) + 1;
-          // const nbrOfCards = 5;
-          const cardsInHand = [];
-          for (let i = 0; i < nbrOfCards; i++) {
-            const card = new PokerCard(Math.floor(Math.random() * 53));
-            cardsInHand.push(card);
-          }
-          setHand(new Hand(cardsInHand));
-
-          setHand(
-            new Hand([
-              new PokerCard(6),
-              new PokerCard(0),
-              new PokerCard(18),
-              new PokerCard(25),
-              new PokerCard(30),
-            ])
-          );
-        }}
-      >
-        New Random hand
-      </button> */}
-      {hand && (
-        <div>
-          <p>Suits</p>
-          {['spades', 'hearts', 'clubs', 'diamonds'].map((suit, i) => {
-            const suitsCount = hand.getSuitsCount() as any;
-            return <p key={i}>{`${suit}: ${suitsCount[suit]}`}</p>;
-          })}
-
-          <p>Ranks</p>
-          {Object.keys(hand.getRankCount()).map((rank, i) => {
-            const count = hand.getRankCount()[+rank];
-            if (count < 1) {
-              return;
-            }
-            return <p key={i}>{`${rank}: ${hand.getRankCount()[+rank]}`}</p>;
-          })}
-
-          <p>Hand type</p>
-          <p>{hand.getHandType()}</p>
-
-          <p>Hand score</p>
-          <p>{`${getScore(hand)[0]} * ${getScore(hand)[1]} = ${
-            getScore(hand)[2]
-          }`}</p>
-        </div>
-      )}
-    </>
+    </div>
   );
 }
 
