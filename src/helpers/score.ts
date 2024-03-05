@@ -30,6 +30,9 @@ export function getScore(hand: Hand): [number, number, number] {
     if (card.enhancement === 'bonus') {
       totalChips += 30;
     }
+    if (card.edition === 'foil') {
+      totalChips += 50;
+    }
     if (card.seal === 'red') {
       totalChips *= 2;
     }

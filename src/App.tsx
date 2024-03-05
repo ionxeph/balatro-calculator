@@ -52,16 +52,14 @@ function App() {
         )}
         {hand &&
           hand.cards.map((card, i) => (
-            <div className="row-start-2 text-white">
-              <p key={i} className="text-center">
+            <div className="row-start-2 text-white" key={i}>
+              <p className="text-center">
                 {`${card.enhancement.toUpperCase()}${
                   card.enhancement !== 'none' ? ' CARD' : ''
                 }`}
               </p>
-              <p key={i} className="text-center">
-                {card.edition.toUpperCase()}
-              </p>
-              <p key={i} className="text-center">
+              <p className="text-center">{card.edition.toUpperCase()}</p>
+              <p className="text-center">
                 {`${card.seal.toUpperCase()}${
                   card.seal !== 'none' ? ' SEAL' : ''
                 }`}
