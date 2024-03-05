@@ -83,7 +83,12 @@ export function getBaseChipsAndMultBasedOnLevel(handType: HandType, level: numbe
 }
 
 // returns [chips, mult, total]
-export function getScore(hand: Hand, levels: number[]): [number, number, number] {
+export function getScore(
+  hand: Hand,
+  levels: number[],
+  steelCardCount: number,
+  steelRedSealCount: number
+): [number, number, number] {
   const handType = hand.getHandType();
   let levelIndex = 0;
   chipsAndMultArray.forEach((v, i) => {
@@ -131,5 +136,13 @@ export function getScore(hand: Hand, levels: number[]): [number, number, number]
       chips += totalChips;
     }
   });
+
+  if (steelCardCount > 0) {
+    for (let i = 0; i < steelCardCount + steelRedSealCount; i++) {
+      mult *= 1.5;
+    }
+  }
+
+  // TODO: jokers
   return [chips, mult, chips * mult];
 }

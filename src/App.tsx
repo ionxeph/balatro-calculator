@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { PokerCard } from './helpers/poker-card';
 import { Hand } from './helpers/hand';
 import { chipsAndMultArray, getScore } from './helpers/score';
@@ -11,11 +11,41 @@ function App() {
   const [hand, setHand] = useState<Hand>();
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [levels, setLevels] = useState(new Array(chipsAndMultArray.length).fill(1));
+  const [steelCardCount, setSteelCardCount] = useState(0);
+  const [steelRedSealCount, setSteelRedSealCount] = useState(0);
 
   return (
     <>
-      <div>
-        <Jokers />
+      <div className="grid gap-2 grid-cols-8 text-white">
+        <div className="col-span-6">
+          <Jokers />
+        </div>
+        <div className="col-span-2 text-right">
+          <label className="block" htmlFor="steel-card-count">
+            Number of steel cards in hand:
+          </label>
+          <input
+            id="steel-card-count"
+            type="number"
+            className="bg-black border-white border-2 rounded-md"
+            value={steelCardCount}
+            onChange={(e: ChangeEvent) => {
+              setSteelCardCount(+(e.target as HTMLInputElement).value);
+            }}
+          />
+          <label className="block mt-3" htmlFor="steel-red-seal-count">
+            Number of red seals on them:
+          </label>
+          <input
+            id="steel-red-seal-count"
+            type="number"
+            className="bg-black border-white border-2 rounded-md"
+            value={steelRedSealCount}
+            onChange={(e: ChangeEvent) => {
+              setSteelRedSealCount(+(e.target as HTMLInputElement).value);
+            }}
+          />
+        </div>
       </div>
       <div className="grid auto-cols-auto grid-flow-col gap-2 text-white">
         <div className="flex flex-col justify-between">
@@ -25,11 +55,11 @@ function App() {
           <div className="text-white h-40 text-center">
             {hand && hand.cards.length > 0 && (
               <>
-                <p className="text-5xl mb-3">{hand.getHandType()}</p>
-                <p className="text-6xl">
+                <p className="text-2xl mb-3">{hand.getHandType()}</p>
+                <p className="text-4xl">
                   {(() => {
-                    const [chips, mult, score] = getScore(hand, levels);
-                    return `${chips} * ${mult} = ${score}`;
+                    const [chips, mult, score] = getScore(hand, levels, steelCardCount, steelRedSealCount);
+                    return `${Math.round(chips)} * ${Math.round(mult)} = ${Math.round(score)}`;
                   })()}
                 </p>
               </>

@@ -1,5 +1,5 @@
 export type Suit = 'spades' | 'hearts' | 'clubs' | 'diamonds' | 'none';
-export type Enhancement = 'none' | 'bonus' | 'mult' | 'wild' | 'glass' | 'stone' | 'lucky'; // TODO: steel
+export type Enhancement = 'none' | 'bonus' | 'mult' | 'wild' | 'glass' | 'stone' | 'lucky';
 export type Edition = 'base' | 'foil' | 'holographic' | 'polychrome';
 export type Seal = 'none' | 'red' | 'gold'; // TODO: the other seals don't affect score, gold only has an effect with certain jokers
 
