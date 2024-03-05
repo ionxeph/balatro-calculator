@@ -108,7 +108,9 @@ export function getScore(hand: Hand, levels: number[]): [number, number, number]
           mult *= 2;
           break;
         case 'lucky':
-          // TODO: lucky handling
+          if (card.isLucky) {
+            mult += 20;
+          }
           break;
         default:
           break;

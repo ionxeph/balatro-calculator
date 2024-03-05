@@ -44,6 +44,22 @@ function App() {
                   </p>
                   <p className="text-center">{card.edition.toUpperCase()}</p>
                   <p className="text-center">{`${card.seal.toUpperCase()}${card.seal !== 'none' ? ' SEAL' : ''}`}</p>
+                  {card.enhancement === 'lucky' && (
+                    <div className="flex justify-center mt-3">
+                      <input
+                        id={`is-lucky-${i}`}
+                        type="checkbox"
+                        checked={card.isLucky}
+                        onChange={() => {
+                          card.isLucky = !card.isLucky;
+                          setHand(new Hand(hand.cards));
+                        }}
+                      />
+                      <label className="ml-1" htmlFor={`is-lucky-${i}`}>
+                        actually lucky
+                      </label>
+                    </div>
+                  )}
                 </div>
               ))
             ) : (

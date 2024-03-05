@@ -14,6 +14,7 @@ export class PokerCard {
   edition: Edition = 'base';
   seal: Seal = 'none';
   isScoring = false;
+  isLucky = false; // when true and enhancement is lucky, always proc lucky card bonus
 
   constructor(id: number, enhancement: Enhancement, edition: Edition, seal: Seal) {
     this.id = id;
