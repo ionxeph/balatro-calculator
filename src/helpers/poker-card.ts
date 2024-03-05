@@ -1,4 +1,14 @@
 export type Suit = 'spades' | 'hearts' | 'clubs' | 'diamonds' | 'stone';
+export type Enhancement =
+  | 'none'
+  | 'bonus'
+  | 'mult'
+  | 'wild'
+  | 'glass'
+  | 'lucky'; // TODO: steel
+export type Edition = 'base' | 'foil' | 'holographic' | 'polychrome';
+export type Seal = 'none' | 'red' | 'gold'; // the other seals don't affect score, gold only has an effect with certain jokers
+
 export class PokerCard {
   // 0 to 52
   // 0 is stone card
@@ -7,6 +17,9 @@ export class PokerCard {
   // etc.
   // suits order is spades -> hearts -> clubs -> diamonds
   id: number;
+  enhancement: Enhancement = 'none';
+  edition: Edition = 'base';
+  seal: Seal = 'none';
   isScoring = false;
 
   constructor(id: number) {
@@ -43,15 +56,23 @@ export class PokerCard {
 
   getChips(): number {
     const rank = this.getRank();
+    let totalChips: number;
     if (rank === 0) {
-      return 50;
+      totalChips = 50;
     } else if (rank === 1) {
-      return 11;
+      totalChips = 11;
     } else if (rank > 10) {
-      return 10;
+      totalChips = 10;
     } else {
-      return rank;
+      totalChips = rank;
     }
+    if (this.enhancement === 'bonus') {
+      totalChips += 30;
+    }
+    if (this.seal === 'red') {
+      totalChips *= 2;
+    }
+    return totalChips;
   }
 
   getImageName(): string {
