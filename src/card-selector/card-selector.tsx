@@ -85,7 +85,7 @@ function CardSelector({ open, onSelect }: { open: boolean; onSelect: (card: Poke
           }
         )}
       </div>
-      <div className="grid grid-cols-4 gap-1 pb-20">
+      <div className="grid grid-cols-4 gap-1 pb-10">
         {aceIds.map((aceId) => (
           <div key={aceId} className="grid grid-rows gap-1">
             {new Array(13).fill(0).map((_, i) => {

@@ -1,7 +1,7 @@
 import { Hand, HandType } from './hand';
 
 // chips and mults are represented as [chips, mult]
-const baseChipsAndMult = new Map<HandType, [number, number]>([
+export const baseChipsAndMult = new Map<HandType, [number, number]>([
   ['Flush Five', [200, 16]],
   ['Flush House', [140, 14]],
   ['Five of a Kind', [120, 12]],
@@ -17,9 +17,81 @@ const baseChipsAndMult = new Map<HandType, [number, number]>([
   ['High Card', [5, 1]],
 ]);
 
+export const chipsAndMultArray = Array.from(baseChipsAndMult);
+
+// returns [chips, mult]
+export function getBaseChipsAndMultBasedOnLevel(handType: HandType, level: number): [number, number] {
+  let [chips, mult] = baseChipsAndMult.get(handType) as [number, number];
+  switch (handType) {
+    case 'Flush Five':
+      chips += (level - 1) * 40;
+      mult += (level - 1) * 3;
+      break;
+    case 'Flush House':
+      chips += (level - 1) * 40;
+      mult += (level - 1) * 3;
+      break;
+    case 'Five of a Kind':
+      chips += (level - 1) * 35;
+      mult += (level - 1) * 3;
+      break;
+    case 'Royal Flush':
+      chips += (level - 1) * 40;
+      mult += (level - 1) * 3;
+      break;
+    case 'Straight Flush':
+      chips += (level - 1) * 40;
+      mult += (level - 1) * 3;
+      break;
+    case 'Four of a Kind':
+      chips += (level - 1) * 30;
+      mult += (level - 1) * 3;
+      break;
+    case 'Flush':
+      chips += (level - 1) * 15;
+      mult += (level - 1) * 2;
+      break;
+    case 'Full House':
+      chips += (level - 1) * 25;
+      mult += (level - 1) * 2;
+      break;
+    case 'Straight':
+      chips += (level - 1) * 30;
+      mult += (level - 1) * 2;
+      break;
+    case 'Three of a Kind':
+      chips += (level - 1) * 20;
+      mult += (level - 1) * 2;
+      break;
+    case 'Two Pair':
+      chips += (level - 1) * 20;
+      mult += level - 1;
+      break;
+    case 'Pair':
+      chips += (level - 1) * 15;
+      mult += level - 1;
+      break;
+    case 'High Card':
+      chips += (level - 1) * 10;
+      mult += level - 1;
+      break;
+    default:
+      break;
+  }
+
+  return [chips, mult];
+}
+
 // returns [chips, mult, total]
-export function getScore(hand: Hand): [number, number, number] {
-  let [chips, mult] = baseChipsAndMult.get(hand.getHandType()) as [number, number];
+export function getScore(hand: Hand, levels: number[]): [number, number, number] {
+  const handType = hand.getHandType();
+  let levelIndex = 0;
+  chipsAndMultArray.forEach((v, i) => {
+    if (v[0] === handType) {
+      levelIndex = i;
+    }
+  });
+  let [chips, mult] = getBaseChipsAndMultBasedOnLevel(hand.getHandType(), levels[levelIndex]);
   const scoringCards = hand.cards.filter((card) => card.isScoring);
   scoringCards.forEach((card) => {
     const numberOfRetriggers = card.seal === 'red' ? 2 : 1;
