@@ -31,7 +31,7 @@ function App() {
           )}
         </div>
         <div className="grid grid-cols-5 auto-rows-min justify-self-center content-end gap-y-10 h-full w-[600px]">
-          {hand ? (
+          {hand && hand.cards.length > 0 ? (
             hand.cards.map((card, i) => (
               <div className="text-white h-24" key={i}>
                 <p className="text-center">
@@ -64,7 +64,7 @@ function App() {
             })}
           {(hand === undefined || hand.cards.length < 5) && (
             <button
-              className="row-start-2 text-white border-solid border-2 rounded-md min-h-[171.075px]"
+              className="row-start-2 text-white border-solid border-2 rounded-md min-h-[174.275px]"
               onClick={() => {
                 setSelectorOpen(true);
               }}

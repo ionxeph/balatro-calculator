@@ -67,7 +67,7 @@ function CardSelector({ open, onSelect }: { open: boolean; onSelect: (card: Poke
           'card-enhancement',
           'Enhancement:',
           enhancement,
-          ['none', 'bonus', 'mult', 'wild', 'glass', 'lucky'],
+          ['none', 'bonus', 'mult', 'wild', 'glass', 'stone', 'lucky'],
           (e: ChangeEvent) => {
             setEnhancement((e.target as HTMLOptionElement).value as Enhancement);
           }

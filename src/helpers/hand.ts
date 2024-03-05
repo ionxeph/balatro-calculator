@@ -23,10 +23,10 @@ export class Hand {
     hearts: 0,
     clubs: 0,
     diamonds: 0,
-    stone: 0,
+    none: 0,
   };
-  rankCount: { [key: number]: number } = {
-    0: 0, // stone
+  rankCount: { [key: number | string]: number } = {
+    '-1': 0, // stone
     1: 0,
     2: 0,
     3: 0,
@@ -71,7 +71,7 @@ export class Hand {
   setScoringCards() {
     this.cards.forEach((card) => {
       card.isScoring = false;
-      if (card.id === 0) {
+      if (card.enhancement === 'stone') {
         card.isScoring = true;
       }
     });
@@ -205,7 +205,7 @@ export class Hand {
   getHighestRankRepeat(): number {
     let highest = 0;
     Object.keys(this.rankCount).forEach((rank) => {
-      if (+rank === 0) {
+      if (+rank === -1) {
         return;
       }
       if (this.rankCount[+rank] > highest) {
@@ -216,7 +216,7 @@ export class Hand {
   }
 
   isStraight(): boolean {
-    if (this.cards.length < 5 || this.highestRankRepeat > 1 || this.suitsCount.stone > 0) {
+    if (this.cards.length < 5 || this.highestRankRepeat > 1 || this.suitsCount.none > 0) {
       return false;
     }
 
@@ -270,7 +270,7 @@ export class Hand {
   }
 
   isFlush(): boolean {
-    if (this.cards.length < 5 || this.suitsCount.stone > 0) {
+    if (this.cards.length < 5 || this.suitsCount.none > 0) {
       return false;
     }
     let numberOfUniqueSuits = 0;

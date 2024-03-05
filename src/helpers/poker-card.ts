@@ -1,11 +1,10 @@
-export type Suit = 'spades' | 'hearts' | 'clubs' | 'diamonds' | 'stone';
-export type Enhancement = 'none' | 'bonus' | 'mult' | 'wild' | 'glass' | 'lucky'; // TODO: steel
+export type Suit = 'spades' | 'hearts' | 'clubs' | 'diamonds' | 'none';
+export type Enhancement = 'none' | 'bonus' | 'mult' | 'wild' | 'glass' | 'stone' | 'lucky'; // TODO: steel
 export type Edition = 'base' | 'foil' | 'holographic' | 'polychrome';
 export type Seal = 'none' | 'red' | 'gold'; // TODO: the other seals don't affect score, gold only has an effect with certain jokers
 
 export class PokerCard {
-  // 0 to 52
-  // 0 is stone card
+  // 1 to 52
   // 1 is ace of spades
   // 2 is two of spades
   // etc.
@@ -27,16 +26,20 @@ export class PokerCard {
     this.id = id;
   }
 
+  // -1 represents stone
   getRank(): number {
-    if (this.id !== 0 && this.id % 13 === 0) {
+    if (this.enhancement === 'stone') {
+      return -1;
+    }
+    if (this.id % 13 === 0) {
       return 13;
     }
     return this.id % 13;
   }
 
   getSuit(): Suit {
-    if (this.id === 0) {
-      return 'stone';
+    if (this.enhancement === 'stone') {
+      return 'none';
     }
     const suitNbr = this.id / 13;
     if (suitNbr <= 1) {
@@ -53,7 +56,7 @@ export class PokerCard {
 
   getBaseChips(): number {
     const rank = this.getRank();
-    if (rank === 0) {
+    if (this.enhancement === 'stone') {
       return 50;
     } else if (rank === 1) {
       return 11;
@@ -68,7 +71,7 @@ export class PokerCard {
     const suit = this.getSuit();
     const rank = this.getRank();
     switch (rank) {
-      case 0:
+      case -1:
         return 'stone.webp';
       case 1:
         return `ace_of_${suit}.svg`;
