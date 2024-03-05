@@ -12,7 +12,7 @@ const diamondsAce = 40;
 const aceIds = [spadesAce, heartsAce, clubsAce, diamondsAce];
 
 const getCardButton = (key: number, card: PokerCard, onClick: () => void) => (
-  <button className="h-10 overflow-hidden" key={key} onClick={onClick}>
+  <button className="h-10 overflow-hidden justify-self-center" key={key} onClick={onClick}>
     <img src={`./card-images/${card.getImageName()}`} className="max-h-none" />
   </button>
 );
@@ -27,7 +27,7 @@ const createDropdown = (
   label: string,
   value: Enhancement | Edition | Seal,
   options: Enhancement[] | Edition[] | Seal[],
-  onSelect: (e: ChangeEvent) => void,
+  onSelect: (e: ChangeEvent) => void
 ) => (
   <div className="mb-5 grid grid-cols-8">
     <label htmlFor={id} className="text-white mr-5 col-span-2 text-right">
@@ -61,31 +61,31 @@ function CardSelector({ open, onSelect }: { open: boolean; onSelect: (card: Poke
   };
 
   return (
-    <dialog open={open} className="p-10 top-0 w-full h-lvh absolute bg-slate-900">
+    <dialog open={open} className="p-10 top-0 w-full absolute bg-slate-900">
       <div>
         {createDropdown(
-          'Enhancement:',
           'card-enhancement',
+          'Enhancement:',
           enhancement,
           ['none', 'bonus', 'mult', 'wild', 'glass', 'lucky'],
           (e: ChangeEvent) => {
             setEnhancement((e.target as HTMLOptionElement).value as Enhancement);
-          },
+          }
         )}
-        {createDropdown('Seal:', 'card-seal', seal, ['none', 'red', 'gold'], (e: ChangeEvent) => {
+        {createDropdown('card-seal', 'Seal:', seal, ['none', 'red', 'gold'], (e: ChangeEvent) => {
           setSeal((e.target as HTMLOptionElement).value as Seal);
         })}
         {createDropdown(
-          'Edition:',
           'card-edition',
+          'Edition:',
           edition,
           ['base', 'foil', 'holographic', 'polychrome'],
           (e: ChangeEvent) => {
             setEdition((e.target as HTMLOptionElement).value as Edition);
-          },
+          }
         )}
       </div>
-      <div className="grid grid-cols-4 gap-1">
+      <div className="grid grid-cols-4 gap-1 pb-20">
         {aceIds.map((aceId) => (
           <div key={aceId} className="grid grid-rows gap-1">
             {new Array(13).fill(0).map((_, i) => {

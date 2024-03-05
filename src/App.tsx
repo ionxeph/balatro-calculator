@@ -10,7 +10,7 @@ function App() {
   const [selectorOpen, setSelectorOpen] = useState(false);
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <div className="text-white h-40 mb-10 text-center">
         {hand && hand.cards.length > 0 && (
           <>
@@ -19,7 +19,7 @@ function App() {
           </>
         )}
       </div>
-      <div className="grid grid-cols-5 grid-rows-2 gap-y-10 h-96">
+      <div className="grid grid-cols-5 grid-rows-2 gap-y-10 h-96 w-[600px]">
         {hand &&
           hand.cards.map((card, i) => {
             return (
