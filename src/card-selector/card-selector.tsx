@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import { Enhancement, PokerCard } from '../helpers/poker-card';
+import { Edition, Enhancement, PokerCard, Seal } from '../helpers/poker-card';
 
 const spadesAce = 1;
 
@@ -17,11 +17,45 @@ const getCardButton = (key: number, card: PokerCard, onClick: () => void) => (
   </button>
 );
 
-const createNewCard = (id: number, enhancement: Enhancement): PokerCard => {
+const createNewCard = (
+  id: number,
+  enhancement: Enhancement,
+  edition: Edition,
+  seal: Seal
+): PokerCard => {
   const card = new PokerCard(id);
   card.enhancement = enhancement;
+  card.edition = edition;
+  card.seal = seal;
   return card;
 };
+
+const createDropdown = (
+  id: string,
+  label: string,
+  value: Enhancement | Edition | Seal,
+  options: Enhancement[] | Edition[] | Seal[],
+  onSelect: (e: ChangeEvent) => void
+) => (
+  <div className="mb-5 grid grid-cols-8">
+    <label htmlFor={id} className="text-white mr-5 col-span-2 text-right">
+      {label}
+    </label>
+    <select
+      id={id}
+      name="enhancement"
+      className="w-full col-span-6 bg-black text-white"
+      value={value}
+      onChange={onSelect}
+    >
+      {options.map((v) => (
+        <option value={v} key={v}>
+          {v}
+        </option>
+      ))}
+    </select>
+  </div>
+);
 
 function CardSelector({
   open,
@@ -31,9 +65,13 @@ function CardSelector({
   onSelect: (card: PokerCard) => void;
 }) {
   const [enhancement, setEnhancement] = useState<Enhancement>('none');
+  const [edition, setEdition] = useState<Edition>('base');
+  const [seal, setSeal] = useState<Seal>('none');
 
   const reset = () => {
     setEnhancement('none');
+    setEdition('base');
+    setSeal('none');
   };
 
   return (
@@ -42,38 +80,41 @@ function CardSelector({
       className="p-10 top-0 w-full h-lvh absolute bg-slate-900"
     >
       <div>
-        <div className="mb-5 grid grid-cols-8">
-          <label
-            htmlFor="card-enhancement"
-            className="text-white mr-5 col-span-2 text-right"
-          >
-            Enhancement:
-          </label>
-          <select
-            id="card-enhancement"
-            name="enhancement"
-            className="w-full col-span-6 bg-black text-white"
-            value={enhancement}
-            onChange={(e: ChangeEvent) => {
-              setEnhancement(
-                (e.target as HTMLOptionElement).value as Enhancement
-              );
-            }}
-          >
-            <option value="none">none</option>
-            <option value="bonus">bonus</option>
-            <option value="mult">mult</option>
-            <option value="wild">wild</option>
-            <option value="glass">glass</option>
-            <option value="lucky">lucky</option>
-          </select>
-        </div>
+        {createDropdown(
+          'Enhancement:',
+          'card-enhancement',
+          enhancement,
+          ['none', 'bonus', 'mult', 'wild', 'glass', 'lucky'],
+          (e: ChangeEvent) => {
+            setEnhancement(
+              (e.target as HTMLOptionElement).value as Enhancement
+            );
+          }
+        )}
+        {createDropdown(
+          'Seal:',
+          'card-seal',
+          seal,
+          ['none', 'red', 'gold'],
+          (e: ChangeEvent) => {
+            setSeal((e.target as HTMLOptionElement).value as Seal);
+          }
+        )}
+        {createDropdown(
+          'Edition:',
+          'card-edition',
+          edition,
+          ['base', 'foil', 'holographic', 'polychrome'],
+          (e: ChangeEvent) => {
+            setEdition((e.target as HTMLOptionElement).value as Edition);
+          }
+        )}
       </div>
       <div className="grid grid-cols-4 gap-1">
         {aceIds.map((aceId) => (
           <div key={aceId} className="grid grid-rows gap-1">
             {new Array(13).fill(0).map((_, i) => {
-              const card = createNewCard(aceId + i, enhancement);
+              const card = createNewCard(aceId + i, enhancement, edition, seal);
               return getCardButton(i, card, () => {
                 onSelect(card);
                 reset();

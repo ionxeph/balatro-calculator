@@ -21,7 +21,7 @@ function App() {
           </>
         )}
       </div>
-      <div className="grid grid-cols-5 h-40">
+      <div className="grid grid-cols-5 grid-rows-2 gap-y-10 h-96">
         {hand &&
           hand.cards.map((card, i) => {
             return (
@@ -50,6 +50,24 @@ function App() {
             Add card
           </button>
         )}
+        {hand &&
+          hand.cards.map((card, i) => (
+            <div className="row-start-2 text-white">
+              <p key={i} className="text-center">
+                {`${card.enhancement.toUpperCase()}${
+                  card.enhancement !== 'none' ? ' CARD' : ''
+                }`}
+              </p>
+              <p key={i} className="text-center">
+                {card.edition.toUpperCase()}
+              </p>
+              <p key={i} className="text-center">
+                {`${card.seal.toUpperCase()}${
+                  card.seal !== 'none' ? ' SEAL' : ''
+                }`}
+              </p>
+            </div>
+          ))}
       </div>
 
       <CardSelector
