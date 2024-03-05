@@ -1,13 +1,7 @@
 export type Suit = 'spades' | 'hearts' | 'clubs' | 'diamonds' | 'stone';
-export type Enhancement =
-  | 'none'
-  | 'bonus'
-  | 'mult'
-  | 'wild'
-  | 'glass'
-  | 'lucky'; // TODO: steel
+export type Enhancement = 'none' | 'bonus' | 'mult' | 'wild' | 'glass' | 'lucky'; // TODO: steel
 export type Edition = 'base' | 'foil' | 'holographic' | 'polychrome';
-export type Seal = 'none' | 'red' | 'gold'; // the other seals don't affect score, gold only has an effect with certain jokers
+export type Seal = 'none' | 'red' | 'gold'; // TODO: the other seals don't affect score, gold only has an effect with certain jokers
 
 export class PokerCard {
   // 0 to 52
@@ -22,12 +16,7 @@ export class PokerCard {
   seal: Seal = 'none';
   isScoring = false;
 
-  constructor(
-    id: number,
-    enhancement: Enhancement,
-    edition: Edition,
-    seal: Seal
-  ) {
+  constructor(id: number, enhancement: Enhancement, edition: Edition, seal: Seal) {
     this.id = id;
     this.enhancement = enhancement;
     this.edition = edition;

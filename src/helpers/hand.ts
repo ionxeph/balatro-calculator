@@ -62,8 +62,10 @@ export class Hand {
     });
     this.ranks = this.cards.map((card) => card.getRank());
     this.highestRankRepeat = this.getHighestRankRepeat();
-    this.handType = this.calculateHandType();
-    this.setScoringCards();
+    if (this.cards.length > 0) {
+      this.handType = this.calculateHandType();
+      this.setScoringCards();
+    }
   }
 
   setScoringCards() {
@@ -73,10 +75,7 @@ export class Hand {
         card.isScoring = true;
       }
     });
-    const getScoringRankByRepeatedRank = (
-      numberOfRepeats: number,
-      multiple = false
-    ): number | number[] => {
+    const getScoringRankByRepeatedRank = (numberOfRepeats: number, multiple = false): number | number[] => {
       let scoringRank: number[] = [];
       Object.keys(this.rankCount).forEach((rank) => {
         if (this.rankCount[+rank] === numberOfRepeats) {
@@ -112,11 +111,7 @@ export class Hand {
         break;
       case 'Two Pair':
         this.cards.forEach((card) => {
-          if (
-            (getScoringRankByRepeatedRank(2, true) as number[]).includes(
-              card.getRank()
-            )
-          ) {
+          if ((getScoringRankByRepeatedRank(2, true) as number[]).includes(card.getRank())) {
             card.isScoring = true;
           }
         });
@@ -221,21 +216,13 @@ export class Hand {
   }
 
   isStraight(): boolean {
-    if (
-      this.cards.length < 5 ||
-      this.highestRankRepeat > 1 ||
-      this.suitsCount.stone > 0
-    ) {
+    if (this.cards.length < 5 || this.highestRankRepeat > 1 || this.suitsCount.stone > 0) {
       return false;
     }
 
     // count down from a given rank, and check longest consecutive
     let longest = 0;
-    const checkConsecutive = (
-      rank: number,
-      count: number,
-      ranks: number[]
-    ): number => {
+    const checkConsecutive = (rank: number, count: number, ranks: number[]): number => {
       if (count === 5) {
         return count;
       }

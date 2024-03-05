@@ -12,12 +12,10 @@ function App() {
   return (
     <div>
       <div className="text-white h-40 mb-10 text-center">
-        {hand && (
+        {hand && hand.cards.length > 0 && (
           <>
             <p className="text-5xl mb-3">{hand.getHandType()}</p>
-            <p className="text-6xl">{`${getScore(hand)[0]} * ${
-              getScore(hand)[1]
-            } = ${getScore(hand)[2]}`}</p>
+            <p className="text-6xl">{`${getScore(hand)[0]} * ${getScore(hand)[1]} = ${getScore(hand)[2]}`}</p>
           </>
         )}
       </div>
@@ -54,16 +52,10 @@ function App() {
           hand.cards.map((card, i) => (
             <div className="row-start-2 text-white" key={i}>
               <p className="text-center">
-                {`${card.enhancement.toUpperCase()}${
-                  card.enhancement !== 'none' ? ' CARD' : ''
-                }`}
+                {`${card.enhancement.toUpperCase()}${card.enhancement !== 'none' ? ' CARD' : ''}`}
               </p>
               <p className="text-center">{card.edition.toUpperCase()}</p>
-              <p className="text-center">
-                {`${card.seal.toUpperCase()}${
-                  card.seal !== 'none' ? ' SEAL' : ''
-                }`}
-              </p>
+              <p className="text-center">{`${card.seal.toUpperCase()}${card.seal !== 'none' ? ' SEAL' : ''}`}</p>
             </div>
           ))}
       </div>

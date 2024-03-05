@@ -19,24 +19,43 @@ const baseChipsAndMult = new Map<HandType, [number, number]>([
 
 // returns [chips, mult, total]
 export function getScore(hand: Hand): [number, number, number] {
-  let [chips, mult] = baseChipsAndMult.get(hand.getHandType()) as [
-    number,
-    number
-  ];
+  let [chips, mult] = baseChipsAndMult.get(hand.getHandType()) as [number, number];
   const scoringCards = hand.cards.filter((card) => card.isScoring);
   scoringCards.forEach((card) => {
-    let totalChips = card.getBaseChips();
-
-    if (card.enhancement === 'bonus') {
-      totalChips += 30;
+    const numberOfRetriggers = card.seal === 'red' ? 2 : 1;
+    for (let i = 0; i < numberOfRetriggers; i++) {
+      let totalChips = card.getBaseChips();
+      switch (card.enhancement) {
+        case 'bonus':
+          totalChips += 30;
+          break;
+        case 'mult':
+          mult += 4;
+          break;
+        case 'glass':
+          mult *= 2;
+          break;
+        case 'lucky':
+          // TODO: lucky handling
+          break;
+        default:
+          break;
+      }
+      switch (card.edition) {
+        case 'foil':
+          totalChips += 50;
+          break;
+        case 'holographic':
+          mult += 10;
+          break;
+        case 'polychrome':
+          mult *= 1.5;
+          break;
+        default:
+          break;
+      }
+      chips += totalChips;
     }
-    if (card.edition === 'foil') {
-      totalChips += 50;
-    }
-    if (card.seal === 'red') {
-      totalChips *= 2;
-    }
-    chips += totalChips;
   });
   return [chips, mult, chips * mult];
 }

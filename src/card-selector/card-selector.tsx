@@ -17,12 +17,7 @@ const getCardButton = (key: number, card: PokerCard, onClick: () => void) => (
   </button>
 );
 
-const createNewCard = (
-  id: number,
-  enhancement: Enhancement,
-  edition: Edition,
-  seal: Seal
-): PokerCard => {
+const createNewCard = (id: number, enhancement: Enhancement, edition: Edition, seal: Seal): PokerCard => {
   const card = new PokerCard(id, enhancement, edition, seal);
   return card;
 };
@@ -32,7 +27,7 @@ const createDropdown = (
   label: string,
   value: Enhancement | Edition | Seal,
   options: Enhancement[] | Edition[] | Seal[],
-  onSelect: (e: ChangeEvent) => void
+  onSelect: (e: ChangeEvent) => void,
 ) => (
   <div className="mb-5 grid grid-cols-8">
     <label htmlFor={id} className="text-white mr-5 col-span-2 text-right">
@@ -54,13 +49,7 @@ const createDropdown = (
   </div>
 );
 
-function CardSelector({
-  open,
-  onSelect,
-}: {
-  open: boolean;
-  onSelect: (card: PokerCard) => void;
-}) {
+function CardSelector({ open, onSelect }: { open: boolean; onSelect: (card: PokerCard) => void }) {
   const [enhancement, setEnhancement] = useState<Enhancement>('none');
   const [edition, setEdition] = useState<Edition>('base');
   const [seal, setSeal] = useState<Seal>('none');
@@ -72,10 +61,7 @@ function CardSelector({
   };
 
   return (
-    <dialog
-      open={open}
-      className="p-10 top-0 w-full h-lvh absolute bg-slate-900"
-    >
+    <dialog open={open} className="p-10 top-0 w-full h-lvh absolute bg-slate-900">
       <div>
         {createDropdown(
           'Enhancement:',
@@ -83,20 +69,12 @@ function CardSelector({
           enhancement,
           ['none', 'bonus', 'mult', 'wild', 'glass', 'lucky'],
           (e: ChangeEvent) => {
-            setEnhancement(
-              (e.target as HTMLOptionElement).value as Enhancement
-            );
-          }
+            setEnhancement((e.target as HTMLOptionElement).value as Enhancement);
+          },
         )}
-        {createDropdown(
-          'Seal:',
-          'card-seal',
-          seal,
-          ['none', 'red', 'gold'],
-          (e: ChangeEvent) => {
-            setSeal((e.target as HTMLOptionElement).value as Seal);
-          }
-        )}
+        {createDropdown('Seal:', 'card-seal', seal, ['none', 'red', 'gold'], (e: ChangeEvent) => {
+          setSeal((e.target as HTMLOptionElement).value as Seal);
+        })}
         {createDropdown(
           'Edition:',
           'card-edition',
@@ -104,7 +82,7 @@ function CardSelector({
           ['base', 'foil', 'holographic', 'polychrome'],
           (e: ChangeEvent) => {
             setEdition((e.target as HTMLOptionElement).value as Edition);
-          }
+          },
         )}
       </div>
       <div className="grid grid-cols-4 gap-1">
