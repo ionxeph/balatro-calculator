@@ -23,10 +23,7 @@ const createNewCard = (
   edition: Edition,
   seal: Seal
 ): PokerCard => {
-  const card = new PokerCard(id);
-  card.enhancement = enhancement;
-  card.edition = edition;
-  card.seal = seal;
+  const card = new PokerCard(id, enhancement, edition, seal);
   return card;
 };
 

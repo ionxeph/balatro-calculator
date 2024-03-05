@@ -22,9 +22,16 @@ export class PokerCard {
   seal: Seal = 'none';
   isScoring = false;
 
-  // TODO: add the other stuff in here
-  constructor(id: number) {
+  constructor(
+    id: number,
+    enhancement: Enhancement,
+    edition: Edition,
+    seal: Seal
+  ) {
     this.id = id;
+    this.enhancement = enhancement;
+    this.edition = edition;
+    this.seal = seal;
   }
 
   setId(id: number) {
