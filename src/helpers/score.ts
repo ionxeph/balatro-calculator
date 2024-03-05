@@ -17,31 +17,23 @@ const baseChipsAndMult = new Map<HandType, [number, number]>([
   ['High Card', [5, 1]],
 ]);
 
-// returns [formula, total]
-export function getScore(hand: Hand): [string, number] {
+// returns [chips, mult, total]
+export function getScore(hand: Hand): [number, number, number] {
   let [chips, mult] = baseChipsAndMult.get(hand.getHandType()) as [
     number,
     number
   ];
   const scoringCards = hand.cards.filter((card) => card.isScoring);
-  const chipParticles = [chips];
-  const multParticles = [mult];
-  // parens are represented by [left-paren-particle, right-paren-particle]
-  // let multParens = [];
-  let formula = '(';
   scoringCards.forEach((card) => {
-    chips += card.getChips();
-    chipParticles.push(card.getChips());
-  });
-  chipParticles.forEach((particle, i) => {
-    // if last particle
-    if (i === chipParticles.length - 1) {
-      formula += `${particle}) * `;
-    } else {
-      formula += `${particle} + `;
+    let totalChips = card.getBaseChips();
+
+    if (card.enhancement === 'bonus') {
+      totalChips += 30;
     }
+    if (card.seal === 'red') {
+      totalChips *= 2;
+    }
+    chips += totalChips;
   });
-  // TODO: mult particles and parens
-  formula += `${multParticles[0]}`;
-  return [formula, chips * mult];
+  return [chips, mult, chips * mult];
 }

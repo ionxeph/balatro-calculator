@@ -55,25 +55,17 @@ export class PokerCard {
     return 'diamonds';
   }
 
-  getChips(): number {
+  getBaseChips(): number {
     const rank = this.getRank();
-    let totalChips: number;
     if (rank === 0) {
-      totalChips = 50;
+      return 50;
     } else if (rank === 1) {
-      totalChips = 11;
+      return 11;
     } else if (rank > 10) {
-      totalChips = 10;
+      return 10;
     } else {
-      totalChips = rank;
+      return rank;
     }
-    if (this.enhancement === 'bonus') {
-      totalChips += 30;
-    }
-    if (this.seal === 'red') {
-      totalChips *= 2;
-    }
-    return totalChips;
   }
 
   getImageName(): string {
