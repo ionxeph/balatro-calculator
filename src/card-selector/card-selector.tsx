@@ -22,32 +22,47 @@ const createNewCard = (id: number, enhancement: Enhancement, edition: Edition, s
   return card;
 };
 
-const createDropdown = (
+export const createDropdown = (
   id: string,
   label: string,
   value: Enhancement | Edition | Seal,
   options: Enhancement[] | Edition[] | Seal[],
-  onSelect: (e: ChangeEvent) => void
-) => (
-  <div className="mb-5 grid grid-cols-8">
-    <label htmlFor={id} className="text-white mr-5 col-span-2 text-right">
-      {label}
-    </label>
-    <select
-      id={id}
-      name="enhancement"
-      className="w-full col-span-6 bg-black text-white"
-      value={value}
-      onChange={onSelect}
-    >
-      {options.map((v) => (
-        <option value={v} key={v}>
-          {v}
-        </option>
-      ))}
-    </select>
-  </div>
-);
+  onSelect: (e: ChangeEvent) => void,
+  showLabel = true
+) =>
+  showLabel ? (
+    <div className="mb-5 grid grid-cols-8">
+      <label htmlFor={id} className="text-white mr-5 col-span-2 text-right">
+        {label}
+      </label>
+      <select
+        id={id}
+        name="enhancement"
+        className="w-full col-span-6 bg-black text-white"
+        value={value}
+        onChange={onSelect}
+      >
+        {options.map((v) => (
+          <option value={v} key={v}>
+            {v}
+          </option>
+        ))}
+      </select>
+    </div>
+  ) : (
+    <>
+      <label htmlFor={id} className="sr-only">
+        {label}
+      </label>
+      <select id={id} className="w-full col-span-6 bg-black text-white" value={value} onChange={onSelect}>
+        {options.map((v) => (
+          <option value={v} key={v}>
+            {v}
+          </option>
+        ))}
+      </select>
+    </>
+  );
 
 function CardSelector({ open, onSelect }: { open: boolean; onSelect: (card: PokerCard) => void }) {
   const [enhancement, setEnhancement] = useState<Enhancement>('none');
@@ -85,9 +100,6 @@ function CardSelector({ open, onSelect }: { open: boolean; onSelect: (card: Poke
               setEnhancement((e.target as HTMLOptionElement).value as Enhancement);
             }
           )}
-          {createDropdown('card-seal', 'Seal:', seal, ['none', 'red', 'gold'], (e: ChangeEvent) => {
-            setSeal((e.target as HTMLOptionElement).value as Seal);
-          })}
           {createDropdown(
             'card-edition',
             'Edition:',
@@ -97,6 +109,9 @@ function CardSelector({ open, onSelect }: { open: boolean; onSelect: (card: Poke
               setEdition((e.target as HTMLOptionElement).value as Edition);
             }
           )}
+          {createDropdown('card-seal', 'Seal:', seal, ['none', 'red', 'gold'], (e: ChangeEvent) => {
+            setSeal((e.target as HTMLOptionElement).value as Seal);
+          })}
         </div>
         <div className="grid grid-cols-4 gap-1 pb-10">
           {aceIds.map((aceId) => (

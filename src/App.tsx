@@ -1,9 +1,9 @@
 import { ChangeEvent, useState } from 'react';
-import { PokerCard } from './helpers/poker-card';
+import { Edition, Enhancement, PokerCard, Seal } from './helpers/poker-card';
 import { Hand } from './helpers/hand';
 import { chipsAndMultArray, getScore } from './helpers/score';
 import Card from './card/card';
-import CardSelector from './card-selector/card-selector';
+import CardSelector, { createDropdown } from './card-selector/card-selector';
 import HandTypeLevels from './hand-type-levels/hand-type-levels';
 import Jokers from './jokers/jokers';
 import { Joker } from './helpers/joker';
@@ -74,11 +74,45 @@ function App() {
             {hand && hand.cards.length > 0 ? (
               hand.cards.map((card, i) => (
                 <div className="text-white h-24" key={i}>
-                  <p className="text-center">
-                    {`${card.enhancement.toUpperCase()}${card.enhancement !== 'none' ? ' CARD' : ''}`}
-                  </p>
-                  <p className="text-center">{card.edition.toUpperCase()}</p>
-                  <p className="text-center">{`${card.seal.toUpperCase()}${card.seal !== 'none' ? ' SEAL' : ''}`}</p>
+                  <div className="mb-1">
+                    {createDropdown(
+                      `card-enhancement-${i}`,
+                      `card ${i} enhancement`,
+                      card.enhancement,
+                      ['none', 'bonus', 'mult', 'wild', 'glass', 'stone', 'lucky'],
+                      (e: ChangeEvent) => {
+                        hand.cards[i].enhancement = (e.target as HTMLSelectElement).value as Enhancement;
+                        setHand(new Hand(hand.cards));
+                      },
+                      false
+                    )}
+                  </div>
+                  <div className="mb-1">
+                    {createDropdown(
+                      `card-edition-${i}`,
+                      `card ${i} edition`,
+                      card.edition,
+                      ['base', 'foil', 'holographic', 'polychrome'],
+                      (e: ChangeEvent) => {
+                        hand.cards[i].edition = (e.target as HTMLSelectElement).value as Edition;
+                        setHand(new Hand(hand.cards));
+                      },
+                      false
+                    )}
+                  </div>
+                  <div className="mb-1">
+                    {createDropdown(
+                      `card-seal-${i}`,
+                      `card ${i} seal`,
+                      card.seal,
+                      ['none', 'red', 'gold'],
+                      (e: ChangeEvent) => {
+                        hand.cards[i].seal = (e.target as HTMLSelectElement).value as Seal;
+                        setHand(new Hand(hand.cards));
+                      },
+                      false
+                    )}
+                  </div>
                   {card.enhancement === 'lucky' && (
                     <div className="flex justify-center mt-3">
                       <input
