@@ -14,7 +14,7 @@ function App() {
   const [levels, setLevels] = useState(new Array(chipsAndMultArray.length).fill(1));
   const [steelCardCount, setSteelCardCount] = useState(0);
   const [steelRedSealCount, setSteelRedSealCount] = useState(0);
-  const [jokers, setJokers] = useState<Joker[]>([
+  const [jokers, _setJokers] = useState<Joker[]>([
     { name: 'Wee Joker', edition: 'base' },
     { name: 'Joker', edition: 'base' },
   ]);
