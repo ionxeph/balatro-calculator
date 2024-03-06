@@ -6,6 +6,7 @@ import Card from './card/card';
 import CardSelector from './card-selector/card-selector';
 import HandTypeLevels from './hand-type-levels/hand-type-levels';
 import Jokers from './jokers/jokers';
+import { Joker } from './helpers/joker';
 
 function App() {
   const [hand, setHand] = useState<Hand>();
@@ -13,12 +14,16 @@ function App() {
   const [levels, setLevels] = useState(new Array(chipsAndMultArray.length).fill(1));
   const [steelCardCount, setSteelCardCount] = useState(0);
   const [steelRedSealCount, setSteelRedSealCount] = useState(0);
+  const [jokers, setJokers] = useState<Joker[]>([
+    { name: 'Wee Joker', edition: 'base' },
+    { name: 'Joker', edition: 'base' },
+  ]);
 
   return (
     <>
       <div className="grid gap-2 grid-cols-8 text-white">
         <div className="col-span-6">
-          <Jokers />
+          <Jokers jokers={jokers} />
         </div>
         <div className="col-span-2 text-right">
           <label className="block" htmlFor="steel-card-count">
