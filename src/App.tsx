@@ -103,19 +103,44 @@ function App() {
             {hand &&
               hand.cards.map((card, i) => {
                 return (
-                  <button
-                    key={i}
-                    className="row-start-2 group rounded-md overflow-hidden relative text-center"
-                    onClick={() => {
-                      const cards = hand.cards.filter((_, index) => index !== i);
-                      setHand(new Hand(cards));
-                    }}
-                  >
+                  <div key={i} className="row-start-2 group rounded-md overflow-hidden relative text-center">
                     <Card card={card} />
-                    <div className="hidden absolute top-0 w-full h-full bg-red-400 opacity-70 group-hover:table">
-                      <span className="table-cell align-middle">DELETE</span>
-                    </div>
-                  </button>
+                    <button
+                      className={`hidden absolute top-0 left-0 w-1/2 h-2/3 bg-blue-400 opacity-70${
+                        i !== 0 ? ' group-hover:block' : ''
+                      }`}
+                      onClick={() => {
+                        const tempCard = hand.cards[i];
+                        hand.cards[i] = hand.cards[i - 1];
+                        hand.cards[i - 1] = tempCard;
+                        setHand(new Hand(hand.cards));
+                      }}
+                    >
+                      <span>&lt;--</span>
+                    </button>
+                    <button
+                      className={`hidden absolute top-0 right-0 w-1/2 h-2/3 bg-green-400 opacity-70${
+                        i !== hand.cards.length - 1 ? ' group-hover:block' : ''
+                      }`}
+                      onClick={() => {
+                        const tempCard = hand.cards[i];
+                        hand.cards[i] = hand.cards[i + 1];
+                        hand.cards[i + 1] = tempCard;
+                        setHand(new Hand(hand.cards));
+                      }}
+                    >
+                      <span>--&gt;</span>
+                    </button>
+                    <button
+                      className="hidden absolute bottom-0 w-full h-1/3 bg-red-400 opacity-70 group-hover:block"
+                      onClick={() => {
+                        const cards = hand.cards.filter((_, index) => index !== i);
+                        setHand(new Hand(cards));
+                      }}
+                    >
+                      <span>DELETE</span>
+                    </button>
+                  </div>
                 );
               })}
             {(hand === undefined || hand.cards.length < 5) && (
