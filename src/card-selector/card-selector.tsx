@@ -61,7 +61,7 @@ function CardSelector({ open, onSelect }: { open: boolean; onSelect: (card: Poke
   };
 
   return (
-    <dialog open={open} className="p-10 top-0 w-full absolute bg-slate-900">
+    <dialog open={open} className="p-10 top-0 w-full min-h-screen absolute bg-slate-900">
       <div>
         {createDropdown(
           'card-enhancement',
