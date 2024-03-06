@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useRef, useEffect } from 'react';
 import { Edition, Enhancement, PokerCard, Seal } from '../helpers/poker-card';
 
 const spadesAce = 1;
@@ -60,43 +60,57 @@ function CardSelector({ open, onSelect }: { open: boolean; onSelect: (card: Poke
     setSeal('none');
   };
 
+  const ref = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (open) {
+      ref.current?.showModal();
+      document.body.classList.add('overflow-hidden'); // prevent bg scroll
+    } else {
+      ref.current?.close();
+      document.body.classList.remove('overflow-hidden');
+    }
+  }, [open]);
+
   return (
-    <dialog open={open} className="p-10 top-0 w-full min-h-screen absolute bg-slate-900">
-      <div>
-        {createDropdown(
-          'card-enhancement',
-          'Enhancement:',
-          enhancement,
-          ['none', 'bonus', 'mult', 'wild', 'glass', 'stone', 'lucky'],
-          (e: ChangeEvent) => {
-            setEnhancement((e.target as HTMLOptionElement).value as Enhancement);
-          }
-        )}
-        {createDropdown('card-seal', 'Seal:', seal, ['none', 'red', 'gold'], (e: ChangeEvent) => {
-          setSeal((e.target as HTMLOptionElement).value as Seal);
-        })}
-        {createDropdown(
-          'card-edition',
-          'Edition:',
-          edition,
-          ['base', 'foil', 'holographic', 'polychrome'],
-          (e: ChangeEvent) => {
-            setEdition((e.target as HTMLOptionElement).value as Edition);
-          }
-        )}
-      </div>
-      <div className="grid grid-cols-4 gap-1 pb-10">
-        {aceIds.map((aceId) => (
-          <div key={aceId} className="grid grid-rows gap-1">
-            {new Array(13).fill(0).map((_, i) => {
-              const card = createNewCard(aceId + i, enhancement, edition, seal);
-              return getCardButton(i, card, () => {
-                onSelect(card);
-                reset();
-              });
-            })}
-          </div>
-        ))}
+    <dialog ref={ref} className="bg-slate-900 backdrop:bg-slate-900">
+      <div className="m-10">
+        <div>
+          {createDropdown(
+            'card-enhancement',
+            'Enhancement:',
+            enhancement,
+            ['none', 'bonus', 'mult', 'wild', 'glass', 'stone', 'lucky'],
+            (e: ChangeEvent) => {
+              setEnhancement((e.target as HTMLOptionElement).value as Enhancement);
+            }
+          )}
+          {createDropdown('card-seal', 'Seal:', seal, ['none', 'red', 'gold'], (e: ChangeEvent) => {
+            setSeal((e.target as HTMLOptionElement).value as Seal);
+          })}
+          {createDropdown(
+            'card-edition',
+            'Edition:',
+            edition,
+            ['base', 'foil', 'holographic', 'polychrome'],
+            (e: ChangeEvent) => {
+              setEdition((e.target as HTMLOptionElement).value as Edition);
+            }
+          )}
+        </div>
+        <div className="grid grid-cols-4 gap-1 pb-10">
+          {aceIds.map((aceId) => (
+            <div key={aceId} className="grid grid-rows gap-1">
+              {new Array(13).fill(0).map((_, i) => {
+                const card = createNewCard(aceId + i, enhancement, edition, seal);
+                return getCardButton(i, card, () => {
+                  onSelect(card);
+                  reset();
+                });
+              })}
+            </div>
+          ))}
+        </div>
       </div>
     </dialog>
   );
