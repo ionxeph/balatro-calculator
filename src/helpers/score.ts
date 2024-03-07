@@ -1,5 +1,5 @@
 import { Hand, HandType } from './hand';
-import { Joker } from './joker';
+import { Joker, cardPlayedJokerNames } from './joker';
 
 // chips and mults are represented as [chips, mult]
 export const baseChipsAndMult = new Map<HandType, [number, number]>([
@@ -136,6 +136,42 @@ export function getScore(
           break;
       }
       chips += totalChips;
+
+      let hasCardPlayedEffectJokers = false;
+      jokers.forEach((joker) => {
+        if (cardPlayedJokerNames.includes(joker.name)) {
+          hasCardPlayedEffectJokers = true;
+          return;
+        }
+      });
+      if (hasCardPlayedEffectJokers) {
+        jokers.forEach((joker) => {
+          switch (joker.name) {
+            case 'Greedy Joker':
+              if (card.getSuit() === 'diamonds') {
+                mult += 4;
+              }
+              break;
+            case 'Lusty Joker':
+              if (card.getSuit() === 'hearts') {
+                mult += 4;
+              }
+              break;
+            case 'Wrathful Joker':
+              if (card.getSuit() === 'spades') {
+                mult += 4;
+              }
+              break;
+            case 'Gluttonous Joker':
+              if (card.getSuit() === 'clubs') {
+                mult += 4;
+              }
+              break;
+            default:
+              break;
+          }
+        });
+      }
     }
   });
 
@@ -150,6 +186,26 @@ export function getScore(
     switch (joker.name) {
       case 'Joker':
         mult += 4;
+        break;
+      case 'Jolly Joker':
+        if (hand.highestRankRepeat >= 2) {
+          mult += 8;
+        }
+        break;
+      case 'Zany Joker':
+        if (hand.highestRankRepeat >= 3) {
+          mult += 12;
+        }
+        break;
+      case 'Mad Joker':
+        if (hand.highestRankRepeat >= 4) {
+          mult += 20;
+        }
+        break;
+      case 'Crazy Joker':
+        if (hand.isStraight()) {
+          mult += 12;
+        }
         break;
       default:
         break;

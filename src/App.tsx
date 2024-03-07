@@ -27,7 +27,7 @@ function App() {
             }}
           />
         </div>
-        <div className="col-span-2 text-right">
+        <div className="col-span-2 text-left ml-4">
           <label className="block" htmlFor="steel-card-count">
             Number of steel cards in hand:
           </label>

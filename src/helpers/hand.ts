@@ -223,7 +223,7 @@ export class Hand {
     // count down from a given rank, and check longest consecutive
     let longest = 0;
     const checkConsecutive = (rank: number, count: number, ranks: number[]): number => {
-      if (count === 5) {
+      if (count === 4) {
         return count;
       }
       if (ranks.includes(rank)) {
@@ -237,17 +237,17 @@ export class Hand {
       let consecutive = 0;
       if (rank === 1) {
         // treat ace as "14"
-        consecutive = checkConsecutive(14, 0, this.ranks);
+        consecutive = checkConsecutive(13, 0, this.ranks);
       } else if (rank < 5) {
         consecutive = 0;
       } else {
-        consecutive = checkConsecutive(rank, 0, this.ranks);
+        consecutive = checkConsecutive(rank - 1, 0, this.ranks);
       }
       if (consecutive > longest) {
         longest = consecutive;
       }
     });
-    return longest === 5;
+    return longest === 4;
   }
 
   isFullHouse(): boolean {
