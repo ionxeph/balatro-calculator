@@ -27,6 +27,11 @@ export class PokerCard {
     this.id = id;
   }
 
+  isFace(): boolean {
+    const faceRanks = [11, 12, 13];
+    return faceRanks.includes(this.getRank());
+  }
+
   // -1 represents stone
   getRank(): number {
     if (this.enhancement === 'stone') {

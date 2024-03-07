@@ -1,5 +1,5 @@
 import { Hand, HandType } from './hand';
-import { Joker } from './joker';
+import { Joker, JokerName } from './joker';
 
 // chips and mults are represented as [chips, mult]
 export const baseChipsAndMult = new Map<HandType, [number, number]>([
@@ -90,7 +90,7 @@ export function getScore(
   steelCardCount: number,
   steelRedSealCount: number,
   jokers: Joker[],
-  _hands: number,
+  hands: number,
   discards: number
 ): [number, number, number] {
   const handType = hand.getHandType();
@@ -103,7 +103,11 @@ export function getScore(
   let [chips, mult] = getBaseChipsAndMultBasedOnLevel(hand.getHandType(), levels[levelIndex]);
   const scoringCards = hand.cards.filter((card) => card.isScoring);
   scoringCards.forEach((card) => {
-    const numberOfRetriggers = card.seal === 'red' ? 2 : 1;
+    let numberOfRetriggers = card.seal === 'red' ? 2 : 1;
+    if (hands === 1 && includesCertainJoker(jokers, 'Dusk')) {
+      numberOfRetriggers++;
+    }
+
     for (let i = 0; i < numberOfRetriggers; i++) {
       let totalChips = card.getBaseChips();
       switch (card.enhancement) {
@@ -159,6 +163,17 @@ export function getScore(
           case 'Gluttonous Joker':
             if (card.getSuit() === 'clubs') {
               mult += 4;
+            }
+            break;
+          case 'Fibonacci':
+            const fibonacciNumbers = [1, 2, 3, 5, 8];
+            if (fibonacciNumbers.includes(card.getRank())) {
+              mult += 8;
+            }
+            break;
+          case 'Scary Face':
+            if (card.isFace()) {
+              chips += 30;
             }
             break;
           default:
@@ -249,25 +264,25 @@ export function getScore(
         break;
       case 'Joker Stencil':
         // TODO
-        if (hasBaseball(jokers)) {
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
         break;
       case 'Four Fingers':
         // TODO: add special hand type rules
-        if (hasBaseball(jokers)) {
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
         break;
       case 'Mime':
         // TODO
-        if (hasBaseball(jokers)) {
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
         break;
       case 'Ceremonial Dagger':
         // TODO
-        if (hasBaseball(jokers)) {
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
         break;
@@ -280,13 +295,35 @@ export function getScore(
         }
         break;
       case 'Marble Joker':
-        if (hasBaseball(jokers)) {
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
         break;
       case 'Loyalty Card':
         mult *= 4;
-        if (hasBaseball(jokers)) {
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Misprint':
+        // TODO
+        break;
+      case 'Dusk':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Raised Fist':
+        // TODO
+        break;
+      case 'Fibonacci':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Steel Joker':
+        // TODO
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
         break;
@@ -310,8 +347,8 @@ export function getScore(
   return [chips, mult, chips * mult];
 }
 
-function hasBaseball(jokers: Joker[]): boolean {
-  if (jokers.filter((j) => j.name === 'Baseball Card').length > 0) {
+function includesCertainJoker(jokers: Joker[], name: JokerName): boolean {
+  if (jokers.filter((j) => j.name === name).length > 0) {
     return true;
   }
   return false;

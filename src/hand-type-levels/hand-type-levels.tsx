@@ -10,7 +10,11 @@ function HandTypeLevels({ levels, setLevels }: { levels: number[]; setLevels: (l
           <div key={i} className="grid grid-cols-3 auto-cols-min w-[400px]">
             <p>{type[0]}</p>
             <p>{`${chips} * ${mult}`}</p>
+            <label className="sr-only" htmlFor={`level-${i}`}>
+              type[0]
+            </label>
             <input
+              id={`level-${i}`}
               type="number"
               value={levels[i]}
               className={`bg-black border-white border-2 rounded-md${
