@@ -12,14 +12,16 @@ function App() {
   const [hand, setHand] = useState<Hand>();
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [levels, setLevels] = useState(new Array(chipsAndMultArray.length).fill(1));
+  const [hands, setHands] = useState(1);
+  const [discards, setDiscards] = useState(0);
   const [steelCardCount, setSteelCardCount] = useState(0);
   const [steelRedSealCount, setSteelRedSealCount] = useState(0);
   const [jokers, setJokers] = useState<Joker[]>([]);
 
   return (
     <>
-      <div className="grid gap-2 grid-cols-8 text-white">
-        <div className="col-span-6">
+      <div className="grid gap-6 grid-cols-8 text-white">
+        <div className="col-span-5">
           <Jokers
             jokers={jokers}
             updateJokers={(jokers: Joker[]) => {
@@ -27,26 +29,54 @@ function App() {
             }}
           />
         </div>
-        <div className="col-span-2 text-left ml-4">
-          <label className="block" htmlFor="steel-card-count">
-            Number of steel cards in hand:
+        <div className="col-span-1 text-left">
+          <label className="block" htmlFor="hands">
+            Hands:
+          </label>
+          <input
+            id="hands"
+            type="number"
+            className="bg-black border-white border-2 rounded-md w-full"
+            value={hands}
+            onChange={(e: ChangeEvent) => {
+              setHands(+(e.target as HTMLInputElement).value);
+            }}
+          />
+          <label className="block mt-3" htmlFor="discards">
+            Discards:
+          </label>
+          <input
+            id="discards"
+            type="number"
+            className="bg-black border-white border-2 rounded w-full"
+            value={discards}
+            onChange={(e: ChangeEvent) => {
+              setDiscards(+(e.target as HTMLInputElement).value);
+            }}
+          />
+        </div>
+        <div className="col-span-1 text-left">
+          <label className="block" htmlFor="steel-card-count" title="how many steel cards in hand?">
+            Steel cards:
           </label>
           <input
             id="steel-card-count"
             type="number"
-            className="bg-black border-white border-2 rounded-md"
+            className="bg-black border-white border-2 rounded-md w-full"
+            title="how many steel cards in hand?"
             value={steelCardCount}
             onChange={(e: ChangeEvent) => {
               setSteelCardCount(+(e.target as HTMLInputElement).value);
             }}
           />
-          <label className="block mt-3" htmlFor="steel-red-seal-count">
-            Number of red seals on them:
+          <label className="block mt-3" htmlFor="steel-red-seal-count" title="how many steel cards have red seals?">
+            Red seals:
           </label>
           <input
             id="steel-red-seal-count"
             type="number"
-            className="bg-black border-white border-2 rounded-md"
+            title="how many steel cards have red seals?"
+            className="bg-black border-white border-2 rounded w-full"
             value={steelRedSealCount}
             onChange={(e: ChangeEvent) => {
               setSteelRedSealCount(+(e.target as HTMLInputElement).value);
@@ -65,7 +95,15 @@ function App() {
                 <p className="text-2xl mb-3">{hand.getHandType()}</p>
                 <p className="text-4xl">
                   {(() => {
-                    const [chips, mult, score] = getScore(hand, levels, steelCardCount, steelRedSealCount, jokers);
+                    const [chips, mult, score] = getScore(
+                      hand,
+                      levels,
+                      steelCardCount,
+                      steelRedSealCount,
+                      jokers,
+                      hands,
+                      discards
+                    );
                     return `${Math.round(chips)} * ${Math.round(mult)} = ${Math.round(score)}`;
                   })()}
                 </p>

@@ -1,5 +1,5 @@
 import { Hand, HandType } from './hand';
-import { Joker, cardPlayedJokerNames } from './joker';
+import { Joker } from './joker';
 
 // chips and mults are represented as [chips, mult]
 export const baseChipsAndMult = new Map<HandType, [number, number]>([
@@ -89,7 +89,9 @@ export function getScore(
   levels: number[],
   steelCardCount: number,
   steelRedSealCount: number,
-  jokers: Joker[]
+  jokers: Joker[],
+  _hands: number,
+  discards: number
 ): [number, number, number] {
   const handType = hand.getHandType();
   let levelIndex = 0;
@@ -137,41 +139,32 @@ export function getScore(
       }
       chips += totalChips;
 
-      let hasCardPlayedEffectJokers = false;
       jokers.forEach((joker) => {
-        if (cardPlayedJokerNames.includes(joker.name)) {
-          hasCardPlayedEffectJokers = true;
-          return;
+        switch (joker.name) {
+          case 'Greedy Joker':
+            if (card.getSuit() === 'diamonds') {
+              mult += 4;
+            }
+            break;
+          case 'Lusty Joker':
+            if (card.getSuit() === 'hearts') {
+              mult += 4;
+            }
+            break;
+          case 'Wrathful Joker':
+            if (card.getSuit() === 'spades') {
+              mult += 4;
+            }
+            break;
+          case 'Gluttonous Joker':
+            if (card.getSuit() === 'clubs') {
+              mult += 4;
+            }
+            break;
+          default:
+            break;
         }
       });
-      if (hasCardPlayedEffectJokers) {
-        jokers.forEach((joker) => {
-          switch (joker.name) {
-            case 'Greedy Joker':
-              if (card.getSuit() === 'diamonds') {
-                mult += 4;
-              }
-              break;
-            case 'Lusty Joker':
-              if (card.getSuit() === 'hearts') {
-                mult += 4;
-              }
-              break;
-            case 'Wrathful Joker':
-              if (card.getSuit() === 'spades') {
-                mult += 4;
-              }
-              break;
-            case 'Gluttonous Joker':
-              if (card.getSuit() === 'clubs') {
-                mult += 4;
-              }
-              break;
-            default:
-              break;
-          }
-        });
-      }
     }
   });
 
@@ -180,6 +173,18 @@ export function getScore(
       mult *= 1.5;
     }
   }
+
+  jokers.forEach((joker) => {
+    switch (joker.name) {
+      case 'Mime':
+        for (let i = 0; i < steelCardCount; i++) {
+          mult *= 1.5;
+        }
+        break;
+      default:
+        break;
+    }
+  });
 
   // TODO: jokers
   jokers.forEach((joker) => {
@@ -207,6 +212,73 @@ export function getScore(
           mult += 12;
         }
         break;
+      case 'Droll Joker':
+        if (hand.isFlush()) {
+          mult += 10;
+        }
+        break;
+      case 'Sly Joker':
+        if (hand.highestRankRepeat >= 2) {
+          chips += 50;
+        }
+        break;
+      case 'Wily Joker':
+        if (hand.highestRankRepeat >= 3) {
+          chips += 100;
+        }
+        break;
+      case 'Clever Joker':
+        if (hand.highestRankRepeat >= 4) {
+          chips += 150;
+        }
+        break;
+      case 'Devious Joker':
+        if (hand.isStraight()) {
+          chips += 100;
+        }
+        break;
+      case 'Crafty Joker':
+        if (hand.isFlush()) {
+          chips += 80;
+        }
+        break;
+      case 'Half Joker':
+        if (hand.cards.length <= 3) {
+          mult += 20;
+        }
+        break;
+      case 'Joker Stencil':
+        // TODO
+        if (hasBaseball(jokers)) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Four Fingers':
+        // TODO: add special hand type rules
+        if (hasBaseball(jokers)) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Mime':
+        // TODO
+        if (hasBaseball(jokers)) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Ceremonial Dagger':
+        // TODO
+        if (hasBaseball(jokers)) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Banner':
+        chips += discards * 40;
+        break;
+      case 'Mystic Summit':
+        if (discards === 0) {
+          mult += 15;
+        }
+        break;
       default:
         break;
     }
@@ -225,4 +297,11 @@ export function getScore(
     }
   });
   return [chips, mult, chips * mult];
+}
+
+function hasBaseball(jokers: Joker[]): boolean {
+  if (jokers.filter((j) => j.name === 'Baseball Card').length > 0) {
+    return true;
+  }
+  return false;
 }

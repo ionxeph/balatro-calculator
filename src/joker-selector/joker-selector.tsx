@@ -9,13 +9,18 @@ function JokerSelector({ open, onSelect }: { open: boolean; onSelect: (joker: Jo
 
   const ref = useRef<HTMLDialogElement>(null);
 
+  const reset = () => {
+    setEdition('base');
+    setSearchString('');
+  };
+
   useEffect(() => {
     if (open) {
       ref.current?.showModal();
       document.body.classList.add('overflow-hidden'); // prevent bg scroll
     } else {
       ref.current?.close();
-      setEdition('base');
+      reset();
       document.body.classList.remove('overflow-hidden');
     }
   }, [open]);
