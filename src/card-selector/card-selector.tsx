@@ -31,7 +31,7 @@ export const createDropdown = (
   showLabel = true
 ) =>
   showLabel ? (
-    <div className="mb-5 grid grid-cols-8">
+    <div className="mb-5 grid grid-cols-9">
       <label htmlFor={id} className="text-white mr-5 col-span-2 text-right">
         {label}
       </label>
@@ -83,6 +83,7 @@ function CardSelector({ open, onSelect }: { open: boolean; onSelect: (card: Poke
       document.body.classList.add('overflow-hidden'); // prevent bg scroll
     } else {
       ref.current?.close();
+      reset();
       document.body.classList.remove('overflow-hidden');
     }
   }, [open]);
@@ -120,7 +121,6 @@ function CardSelector({ open, onSelect }: { open: boolean; onSelect: (card: Poke
                 const card = createNewCard(aceId + i, enhancement, edition, seal);
                 return getCardButton(i, card, () => {
                   onSelect(card);
-                  reset();
                 });
               })}
             </div>

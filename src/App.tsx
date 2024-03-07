@@ -14,16 +14,18 @@ function App() {
   const [levels, setLevels] = useState(new Array(chipsAndMultArray.length).fill(1));
   const [steelCardCount, setSteelCardCount] = useState(0);
   const [steelRedSealCount, setSteelRedSealCount] = useState(0);
-  const [jokers, _setJokers] = useState<Joker[]>([
-    { name: 'Wee Joker', edition: 'base' },
-    { name: 'Joker', edition: 'base' },
-  ]);
+  const [jokers, _setJokers] = useState<Joker[]>([]);
 
   return (
     <>
       <div className="grid gap-2 grid-cols-8 text-white">
         <div className="col-span-6">
-          <Jokers jokers={jokers} />
+          <Jokers
+            jokers={jokers}
+            updateJokers={(jokers: Joker[]) => {
+              _setJokers(jokers);
+            }}
+          />
         </div>
         <div className="col-span-2 text-right">
           <label className="block" htmlFor="steel-card-count">
