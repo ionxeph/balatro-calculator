@@ -14,7 +14,7 @@ function App() {
   const [levels, setLevels] = useState(new Array(chipsAndMultArray.length).fill(1));
   const [steelCardCount, setSteelCardCount] = useState(0);
   const [steelRedSealCount, setSteelRedSealCount] = useState(0);
-  const [jokers, _setJokers] = useState<Joker[]>([]);
+  const [jokers, setJokers] = useState<Joker[]>([]);
 
   return (
     <>
@@ -23,7 +23,7 @@ function App() {
           <Jokers
             jokers={jokers}
             updateJokers={(jokers: Joker[]) => {
-              _setJokers(jokers);
+              setJokers(jokers);
             }}
           />
         </div>
@@ -65,7 +65,7 @@ function App() {
                 <p className="text-2xl mb-3">{hand.getHandType()}</p>
                 <p className="text-4xl">
                   {(() => {
-                    const [chips, mult, score] = getScore(hand, levels, steelCardCount, steelRedSealCount);
+                    const [chips, mult, score] = getScore(hand, levels, steelCardCount, steelRedSealCount, jokers);
                     return `${Math.round(chips)} * ${Math.round(mult)} = ${Math.round(score)}`;
                   })()}
                 </p>

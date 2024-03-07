@@ -18,7 +18,11 @@ function Jokers({ jokers, updateJokers }: { jokers: Joker[]; updateJokers: (joke
             Add a joker
           </button>
           {jokers.map((joker, i) => (
-            <div key={i} className="group w-28 min-w-28 h-36 self-center flex relative" title={joker.name}>
+            <div
+              key={i}
+              className="group w-28 min-w-28 h-36 self-center flex relative"
+              title={`${joker.edition.toUpperCase()} ${joker.name}`}
+            >
               <img className="m-auto" src={`./jokers/${joker.name}.webp`} alt={joker.name} />
               <button
                 className={`hidden absolute top-0 left-0 w-1/2 h-2/3 bg-blue-400 opacity-70${
@@ -66,7 +70,7 @@ function Jokers({ jokers, updateJokers }: { jokers: Joker[]; updateJokers: (joke
         onSelect={(joker: Joker) => {
           setOpen(false);
           jokers.push(joker);
-          updateJokers(jokers);
+          updateJokers(JSON.parse(JSON.stringify(jokers)));
         }}
       />
     </>

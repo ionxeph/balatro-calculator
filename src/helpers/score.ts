@@ -1,4 +1,5 @@
 import { Hand, HandType } from './hand';
+import { Joker } from './joker';
 
 // chips and mults are represented as [chips, mult]
 export const baseChipsAndMult = new Map<HandType, [number, number]>([
@@ -87,7 +88,8 @@ export function getScore(
   hand: Hand,
   levels: number[],
   steelCardCount: number,
-  steelRedSealCount: number
+  steelRedSealCount: number,
+  jokers: Joker[]
 ): [number, number, number] {
   const handType = hand.getHandType();
   let levelIndex = 0;
@@ -144,5 +146,27 @@ export function getScore(
   }
 
   // TODO: jokers
+  jokers.forEach((joker) => {
+    switch (joker.name) {
+      case 'Joker':
+        mult += 4;
+        break;
+      default:
+        break;
+    }
+    switch (joker.edition) {
+      case 'foil':
+        chips += 50;
+        break;
+      case 'holographic':
+        mult += 10;
+        break;
+      case 'polychrome':
+        mult *= 1.5;
+        break;
+      default:
+        break;
+    }
+  });
   return [chips, mult, chips * mult];
 }
