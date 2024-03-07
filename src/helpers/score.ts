@@ -279,6 +279,17 @@ export function getScore(
           mult += 15;
         }
         break;
+      case 'Marble Joker':
+        if (hasBaseball(jokers)) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Loyalty Card':
+        mult *= 4;
+        if (hasBaseball(jokers)) {
+          mult *= 1.5;
+        }
+        break;
       default:
         break;
     }

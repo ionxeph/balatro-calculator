@@ -21,7 +21,9 @@ function Jokers({ jokers, updateJokers }: { jokers: Joker[]; updateJokers: (joke
             <div
               key={i}
               className="group w-28 min-w-28 h-36 self-center flex relative"
-              title={`${joker.edition.toUpperCase()} ${joker.name}`}
+              title={`${joker.edition.toUpperCase()} ${joker.name}${
+                joker.name === 'Loyalty Card' ? ' assumes Loyalty Card is active' : ''
+              }`}
             >
               <img className="m-auto" src={`./jokers/${joker.name}.webp`} alt={joker.name} />
               <button
