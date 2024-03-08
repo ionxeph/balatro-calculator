@@ -27,9 +27,9 @@ export class PokerCard {
     this.id = id;
   }
 
-  isFace(): boolean {
+  isFace(hasPareidolia: boolean): boolean {
     const faceRanks = [11, 12, 13];
-    return faceRanks.includes(this.getRank());
+    return hasPareidolia || faceRanks.includes(this.getRank());
   }
 
   // -1 represents stone

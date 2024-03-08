@@ -101,10 +101,16 @@ export function getScore(
     }
   });
   let [chips, mult] = getBaseChipsAndMultBasedOnLevel(hand.getHandType(), levels[levelIndex]);
-  const scoringCards = hand.cards.filter((card) => card.isScoring);
+  const scoringCards = includesCertainJoker(jokers, 'Splash')
+    ? hand.cards.map((card) => card)
+    : hand.cards.filter((card) => card.isScoring);
   scoringCards.forEach((card) => {
     let numberOfRetriggers = card.seal === 'red' ? 2 : 1;
     if (hands === 1 && includesCertainJoker(jokers, 'Dusk')) {
+      numberOfRetriggers++;
+    }
+    const hackRetriggers = [2, 3, 4, 5];
+    if (includesCertainJoker(jokers, 'Hack') && hackRetriggers.includes(card.getRank())) {
       numberOfRetriggers++;
     }
 
@@ -172,8 +178,24 @@ export function getScore(
             }
             break;
           case 'Scary Face':
-            if (card.isFace()) {
+            if (card.isFace(includesCertainJoker(jokers, 'Pareidolia'))) {
               chips += 30;
+            }
+            break;
+          case 'Even Steven':
+            if (card.getRank() <= 10 && card.getRank() % 2 === 0) {
+              mult += 4;
+            }
+            break;
+          case 'Odd Todd':
+            if (card.getRank() <= 9 && card.getRank() % 2 === 1) {
+              chips += 30;
+            }
+            break;
+          case 'Scholar':
+            if (card.getRank() === 1) {
+              chips += 20;
+              mult += 4;
             }
             break;
           default:
@@ -322,6 +344,101 @@ export function getScore(
         }
         break;
       case 'Steel Joker':
+        // TODO
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Abstract Joker':
+        mult *= 3 * jokers.length;
+        break;
+      case 'Hack':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Pareidolia':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Gros Michel':
+        mult += 15;
+        break;
+      case 'Supernova':
+        // TODO
+        break;
+      case 'Ride the Bus':
+        // TODO
+        break;
+      case 'Space Joker':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Burglar':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Blackboard':
+        // TODO
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Runner':
+        // TODO
+        break;
+      case 'Ice Cream':
+        // TODO
+        break;
+      case 'Blue Joker':
+        // TODO
+        break;
+      case 'Constellation':
+        // TODO
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Hiker':
+        // TODO
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Green Joker':
+        // TODO
+        break;
+      case 'Cavendish':
+        mult *= 3;
+        break;
+      case 'Card Sharp':
+        // TODO
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Red Card':
+        // TODO
+        break;
+      case 'Madness':
+        // TODO
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Square Joker':
+        // TODO
+        break;
+      case 'Vampire':
+        // TODO
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Shortcut':
         // TODO
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
