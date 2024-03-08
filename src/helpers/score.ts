@@ -303,7 +303,7 @@ export function getScore(
         }
         break;
       case 'Ceremonial Dagger':
-        // TODO
+        mult += joker.specialNumber!;
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
@@ -322,7 +322,9 @@ export function getScore(
         }
         break;
       case 'Loyalty Card':
-        mult *= 4;
+        if (joker.specialConditionMet) {
+          mult *= 4;
+        }
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
