@@ -89,7 +89,7 @@ function App() {
           <HandTypeLevels levels={levels} setLevels={(levels: number[]) => setLevels(levels)} />
         </div>
         <div className="grid grid-flow-row items-center">
-          <div className="text-white h-40 text-center">
+          <div className="text-white h-40 text-center border-2 border-orange-700">
             {hand && hand.cards.length > 0 && (
               <>
                 <p className="text-2xl mb-3">{hand.getHandType()}</p>
@@ -145,7 +145,7 @@ function App() {
                       `card-seal-${i}`,
                       `card ${i} seal`,
                       card.seal,
-                      ['none', 'red', 'gold'],
+                      ['none', 'red'],
                       (e: ChangeEvent) => {
                         hand.cards[i].seal = (e.target as HTMLSelectElement).value as Seal;
                         setHand(new Hand(hand.cards));

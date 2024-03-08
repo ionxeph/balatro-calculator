@@ -110,7 +110,7 @@ function CardSelector({ open, onSelect }: { open: boolean; onSelect: (card: Poke
               setEdition((e.target as HTMLOptionElement).value as Edition);
             }
           )}
-          {createDropdown('card-seal', 'Seal:', seal, ['none', 'red', 'gold'], (e: ChangeEvent) => {
+          {createDropdown('card-seal', 'Seal:', seal, ['none', 'red'], (e: ChangeEvent) => {
             setSeal((e.target as HTMLOptionElement).value as Seal);
           })}
         </div>

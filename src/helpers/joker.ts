@@ -131,7 +131,7 @@ export type JokerName =
   | 'Triboulet'
   | 'Yorick';
 
-export type Joker = { name: JokerName; edition: Edition };
+export type Joker = { name: JokerName; edition: Edition; specialNumber?: number; specialConditionMet?: boolean };
 
 export const allJokerNames: JokerName[] = [
   'placeholder',
@@ -264,6 +264,53 @@ export const allJokerNames: JokerName[] = [
   'Triboulet',
   'Yorick',
 ];
+
+export const jokersWithSpecialNumbersStartingAtZero: JokerName[] = [
+  'Ceremonial Dagger',
+  'Misprint',
+  'Raised Fist',
+  'Supernova',
+  'Ride the Bus',
+  'Runner',
+  'Ice Cream',
+  'Blue Joker',
+  'Hiker',
+  'Green Joker',
+  'Red Card',
+  'Square Joker',
+  'Baron',
+  'Erosion',
+  'Fortune Teller',
+  'Stone Joker',
+  'Bull',
+  'Flash Card',
+  'Popcorn',
+  'Spare Trousers',
+  'Castle',
+  'Swashbuckler',
+  'Wee Joker',
+  'Shoot the Moon',
+  'Bootstraps',
+];
+
+export const jokerWithSpecialNumbersStartingAtOne: JokerName[] = [
+  'Joker Stencil',
+  'Steel Joker',
+  'Constellation',
+  'Madness',
+  'Vampire',
+  'Hologram',
+  'Obelisk',
+  'Lucky Cat',
+  'Ramen',
+  'Campfire',
+  'Throwback',
+  'Glass Joker',
+  'Hit the Road',
+  'Canio',
+];
+
+export const jokerWithSpecialConditions: JokerName[] = ['Blackboard', 'Card Sharp', 'Bloodstone'];
 
 export const cardPlayedJokerNames: JokerName[] = [
   'Greedy Joker',

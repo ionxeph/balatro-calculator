@@ -1,7 +1,13 @@
 import { useRef, useEffect, ChangeEvent, FormEvent, useState } from 'react';
 import { createDropdown } from '../card-selector/card-selector';
 import { Edition } from '../helpers/poker-card';
-import { Joker, allJokerNames } from '../helpers/joker';
+import {
+  Joker,
+  allJokerNames,
+  jokerWithSpecialConditions,
+  jokerWithSpecialNumbersStartingAtOne,
+  jokersWithSpecialNumbersStartingAtZero,
+} from '../helpers/joker';
 
 function JokerSelector({ open, onSelect }: { open: boolean; onSelect: (joker: Joker) => void }) {
   const [edition, setEdition] = useState<Edition>('base');
@@ -59,7 +65,24 @@ function JokerSelector({ open, onSelect }: { open: boolean; onSelect: (joker: Jo
           {allJokerNames
             .filter((name) => name.toLowerCase().includes(searchString.toLowerCase()))
             .map((name, i) => (
-              <button key={i} className="justify-self-center" title={name} onClick={() => onSelect({ name, edition })}>
+              <button
+                key={i}
+                className="justify-self-center"
+                title={name}
+                onClick={() => {
+                  let specialConditionMet, specialNumber;
+                  if (jokerWithSpecialConditions.includes(name)) {
+                    specialConditionMet = false;
+                  }
+                  if (jokersWithSpecialNumbersStartingAtZero.includes(name)) {
+                    specialNumber = 0;
+                  }
+                  if (jokerWithSpecialNumbersStartingAtOne.includes(name)) {
+                    specialNumber = 1;
+                  }
+                  onSelect({ name, edition, specialNumber, specialConditionMet });
+                }}
+              >
                 <img src={`./jokers/${name}.webp`} alt={name} />
               </button>
             ))}
