@@ -104,6 +104,7 @@ export function getScore(
   const scoringCards = includesCertainJoker(jokers, 'Splash')
     ? hand.cards.map((card) => card)
     : hand.cards.filter((card) => card.isScoring);
+  let photographTriggered = false;
   scoringCards.forEach((card) => {
     let numberOfRetriggers = card.seal === 'red' ? 2 : 1;
     if (hands === 1 && includesCertainJoker(jokers, 'Dusk')) {
@@ -198,6 +199,12 @@ export function getScore(
               mult += 4;
             }
             break;
+          case 'Photograph':
+            if (!photographTriggered && card.isFace(includesCertainJoker(jokers, 'Pareidolia'))) {
+              mult *= 2;
+              photographTriggered = true;
+            }
+            break;
           default:
             break;
         }
@@ -205,6 +212,7 @@ export function getScore(
     }
   });
 
+  // TODO: steel kings and queens with held-in-hand jokers cannot be calculated perfectly like this
   if (steelCardCount > 0) {
     for (let i = 0; i < steelCardCount + steelRedSealCount; i++) {
       mult *= 1.5;
@@ -213,9 +221,25 @@ export function getScore(
 
   jokers.forEach((joker) => {
     switch (joker.name) {
+      case 'Shoot the Moon':
+        for (let i = 0; i < joker.specialNumber!; i++) {
+          mult + 13;
+          if (includesCertainJoker(jokers, 'Mime')) {
+            mult + 13;
+          }
+        }
+        break;
       case 'Mime':
         for (let i = 0; i < steelCardCount; i++) {
           mult *= 1.5;
+        }
+        break;
+      case 'Baron':
+        for (let i = 0; i < joker.specialNumber!; i++) {
+          mult *= 1.5;
+          if (includesCertainJoker(jokers, 'Mime')) {
+            mult *= 1.5;
+          }
         }
         break;
       default:
@@ -285,7 +309,7 @@ export function getScore(
         }
         break;
       case 'Joker Stencil':
-        // TODO
+        mult *= joker.specialNumber!;
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
@@ -297,7 +321,6 @@ export function getScore(
         }
         break;
       case 'Mime':
-        // TODO
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
@@ -330,7 +353,7 @@ export function getScore(
         }
         break;
       case 'Misprint':
-        // TODO
+        mult += joker.specialNumber!;
         break;
       case 'Dusk':
         if (includesCertainJoker(jokers, 'Baseball Card')) {
@@ -338,7 +361,7 @@ export function getScore(
         }
         break;
       case 'Raised Fist':
-        // TODO
+        mult += joker.specialNumber!;
         break;
       case 'Fibonacci':
         if (includesCertainJoker(jokers, 'Baseball Card')) {
@@ -346,7 +369,7 @@ export function getScore(
         }
         break;
       case 'Steel Joker':
-        // TODO
+        mult *= joker.specialNumber!;
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
@@ -368,10 +391,10 @@ export function getScore(
         mult += 15;
         break;
       case 'Supernova':
-        // TODO
+        mult += joker.specialNumber!;
         break;
       case 'Ride the Bus':
-        // TODO
+        mult += joker.specialNumber!;
         break;
       case 'Space Joker':
         if (includesCertainJoker(jokers, 'Baseball Card')) {
@@ -384,58 +407,62 @@ export function getScore(
         }
         break;
       case 'Blackboard':
-        // TODO
+        if (joker.specialConditionMet) {
+          mult *= 3;
+        }
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
         break;
       case 'Runner':
-        // TODO
+        chips += joker.specialNumber!;
         break;
       case 'Ice Cream':
-        // TODO
+        chips += joker.specialNumber!;
         break;
       case 'Blue Joker':
-        // TODO
+        chips += joker.specialNumber!;
         break;
       case 'Constellation':
-        // TODO
+        mult *= joker.specialNumber!;
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
         break;
       case 'Hiker':
-        // TODO
+        chips += joker.specialNumber!;
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
         break;
       case 'Green Joker':
-        // TODO
+        mult += joker.specialNumber!;
         break;
       case 'Cavendish':
         mult *= 3;
         break;
       case 'Card Sharp':
-        // TODO
+        if (joker.specialConditionMet) {
+          mult *= 3;
+        }
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
         break;
       case 'Red Card':
-        // TODO
+        mult += joker.specialNumber!;
         break;
       case 'Madness':
-        // TODO
+        mult *= joker.specialNumber!;
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
         break;
       case 'Square Joker':
-        // TODO
+        chips += joker.specialNumber!;
         break;
       case 'Vampire':
-        // TODO
+        mult *= joker.specialNumber!;
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
@@ -445,6 +472,69 @@ export function getScore(
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
+        break;
+      case 'Hologram':
+        mult *= joker.specialNumber!;
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Vagabond':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Cloud 9':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Rocket':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Obelisk':
+        mult *= joker.specialNumber!;
+        break;
+      case 'Midas Mask':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Luchador':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Gift Card':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Turtle Bean':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Erosion':
+        mult += joker.specialNumber!;
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Reserved Parking':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'To the Moon':
+        if (includesCertainJoker(jokers, 'Baseball Card')) {
+          mult *= 1.5;
+        }
+        break;
+      case 'Fortune Teller':
+        mult += joker.specialNumber!;
         break;
       default:
         break;
