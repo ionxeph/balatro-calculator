@@ -344,7 +344,6 @@ export const cardPlayedJokerNames: JokerName[] = [
   'Bloodstone',
   'Arrowhead',
   'Onyx Agate',
-  'Flower Pot',
   'Wee Joker',
   'The Idol',
   'Triboulet',

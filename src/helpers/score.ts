@@ -1,5 +1,6 @@
 import { Hand, HandType } from './hand';
-import { includesCertainJoker, uncommonJokerNames } from './joker';
+import { Joker, includesCertainJoker, uncommonJokerNames } from './joker';
+import { Suit } from './poker-card';
 
 // chips and mults are represented as [chips, mult]
 export const baseChipsAndMult = new Map<HandType, [number, number]>([
@@ -93,7 +94,15 @@ export function getScore(
   discards: number
 ): [number, number, number] {
   const handType = hand.getHandType();
-  const jokers = hand.jokers;
+  const jokers: Joker[] = JSON.parse(JSON.stringify(hand.jokers));
+  // blueprint handling
+  jokers.forEach((joker, i) => {
+    if (joker.name === 'Blueprint' && jokers[i + 1]) {
+      const blueprintEdition = joker.edition;
+      jokers[i] = JSON.parse(JSON.stringify(jokers[i + 1])) as Joker;
+      jokers[i].edition = blueprintEdition;
+    }
+  });
   let levelIndex = 0;
   chipsAndMultArray.forEach((v, i) => {
     if (v[0] === handType) {
@@ -105,7 +114,9 @@ export function getScore(
     ? hand.cards.map((card) => card)
     : hand.cards.filter((card) => card.isScoring);
   let photographTriggered = false;
-  scoringCards.forEach((card) => {
+
+  const hasSmearedJoker = includesCertainJoker(jokers, 'Smeared Joker');
+  scoringCards.forEach((card, i) => {
     let numberOfRetriggers = card.seal === 'red' ? 2 : 1;
     if (hands === 1 && includesCertainJoker(jokers, 'Dusk')) {
       numberOfRetriggers++;
@@ -118,6 +129,9 @@ export function getScore(
       numberOfRetriggers++;
     }
     if (includesCertainJoker(jokers, 'Sock and Buskin') && card.isFace(includesCertainJoker(jokers, 'Pareidolia'))) {
+      numberOfRetriggers++;
+    }
+    if (includesCertainJoker(jokers, 'Hanging Chad') && i === 0) {
       numberOfRetriggers++;
     }
 
@@ -155,8 +169,6 @@ export function getScore(
           break;
       }
       chips += totalChips;
-
-      const hasSmearedJoker = includesCertainJoker(jokers, 'Smeared Joker');
       jokers.forEach((joker) => {
         switch (joker.name) {
           case 'Greedy Joker':
@@ -221,6 +233,21 @@ export function getScore(
           case 'Smiley Face':
             if (card.isFace(includesCertainJoker(jokers, 'Pareidolia'))) {
               mult += 4;
+            }
+            break;
+          case 'Bloodstone':
+            if (joker.specialConditionMet && card.getSuit(hasSmearedJoker).includes('hearts')) {
+              mult *= 2;
+            }
+            break;
+          case 'Arrowhead':
+            if (card.getSuit(hasSmearedJoker).includes('spades')) {
+              chips += 50;
+            }
+            break;
+          case 'Onyx Agate':
+            if (card.getSuit(hasSmearedJoker).includes('clubs')) {
+              mult += 8;
             }
             break;
           default:
@@ -458,6 +485,26 @@ export function getScore(
         break;
       case 'Swashbuckler':
         mult += joker.specialNumber!;
+        break;
+      case 'Throwback':
+        mult *= joker.specialNumber!;
+        break;
+      case 'Glass Joker':
+        mult *= joker.specialNumber!;
+        break;
+      case 'Flower Pot':
+        const scoringSuits: Suit[] = [];
+        scoringCards.forEach((card) => {
+          card.getSuit(hasSmearedJoker).forEach((suit) => scoringSuits.push(suit));
+        });
+        if (
+          scoringSuits.includes('spades') &&
+          scoringSuits.includes('hearts') &&
+          scoringSuits.includes('clubs') &&
+          scoringSuits.includes('diamonds')
+        ) {
+          mult *= 3;
+        }
         break;
       default:
         break;

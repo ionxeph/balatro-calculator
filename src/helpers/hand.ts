@@ -266,7 +266,6 @@ export class Hand {
         longest = consecutive;
       }
     });
-    console.log(longest);
     return longest >= (hasFourFingers ? 3 : 4);
   }
 
