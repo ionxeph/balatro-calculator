@@ -116,6 +116,10 @@ export function getScore(
   let photographTriggered = false;
 
   const hasSmearedJoker = includesCertainJoker(jokers, 'Smeared Joker');
+  const scoringSuits: Suit[] = [];
+  scoringCards.forEach((card) => {
+    card.getSuit(hasSmearedJoker).forEach((suit) => scoringSuits.push(suit));
+  });
   scoringCards.forEach((card, i) => {
     let numberOfRetriggers = card.seal === 'red' ? 2 : 1;
     if (hands === 1 && includesCertainJoker(jokers, 'Dusk')) {
@@ -224,6 +228,9 @@ export function getScore(
               photographTriggered = true;
             }
             break;
+          case 'Ancient Joker':
+            // TODO
+            break;
           case 'Walkie Talkie':
             if (card.getRank() === 10 || card.getRank() === 4) {
               chips += 10;
@@ -249,6 +256,9 @@ export function getScore(
             if (card.getSuit(hasSmearedJoker).includes('clubs')) {
               mult += 8;
             }
+            break;
+          case 'The Idol':
+            // TODO
             break;
           default:
             break;
@@ -466,9 +476,6 @@ export function getScore(
       case 'Spare Trousers':
         mult += joker.specialNumber!;
         break;
-      case 'Ancient Joker':
-        // TODO
-        break;
       case 'Ramen':
         mult *= joker.specialNumber!;
         break;
@@ -493,10 +500,6 @@ export function getScore(
         mult *= joker.specialNumber!;
         break;
       case 'Flower Pot':
-        const scoringSuits: Suit[] = [];
-        scoringCards.forEach((card) => {
-          card.getSuit(hasSmearedJoker).forEach((suit) => scoringSuits.push(suit));
-        });
         if (
           scoringSuits.includes('spades') &&
           scoringSuits.includes('hearts') &&
@@ -505,6 +508,48 @@ export function getScore(
         ) {
           mult *= 3;
         }
+        break;
+      case 'Wee Joker':
+        chips += joker.specialNumber!;
+        break;
+      case 'Seeing Double':
+        if (
+          scoringSuits.includes('clubs') &&
+          (scoringSuits.includes('spades') || scoringSuits.includes('hearts') || scoringSuits.includes('diamonds'))
+        ) {
+          mult *= 2;
+        }
+        break;
+      case 'Hit the Road':
+        mult *= joker.specialNumber!;
+        break;
+      case 'The Duo':
+        if (hand.highestRankRepeat >= 2) {
+          mult *= 2;
+        }
+        break;
+      case 'The Trio':
+        if (hand.highestRankRepeat >= 3) {
+          mult *= 3;
+        }
+        break;
+      case 'The Family':
+        if (hand.highestRankRepeat >= 4) {
+          mult *= 4;
+        }
+        break;
+      case 'The Order':
+        if (hand.isStraight()) {
+          mult *= 3;
+        }
+        break;
+      case 'The Tribe':
+        if (hand.isFlush()) {
+          mult *= 2;
+        }
+        break;
+      case 'Stuntman':
+        chips += 300;
         break;
       default:
         break;
