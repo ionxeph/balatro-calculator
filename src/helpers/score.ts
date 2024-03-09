@@ -374,7 +374,7 @@ export function getScore(
         }
         break;
       case 'Abstract Joker':
-        mult *= 3 * jokers.length;
+        mult += 3 * jokers.length;
         break;
       case 'Hack':
         if (includesCertainJoker(jokers, 'Baseball Card')) {
