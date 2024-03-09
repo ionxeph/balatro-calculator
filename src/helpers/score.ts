@@ -95,14 +95,22 @@ export function getScore(
 ): [number, number, number] {
   const handType = hand.getHandType();
   const jokers: Joker[] = JSON.parse(JSON.stringify(hand.jokers));
-  // blueprint handling
+  // blueprint and brainstorm handling
+  // TODO: rules of blueprint and brainstorm at the same time gets confusing, need clarification here
   jokers.forEach((joker, i) => {
     if (joker.name === 'Blueprint' && jokers[i + 1]) {
       const blueprintEdition = joker.edition;
       jokers[i] = JSON.parse(JSON.stringify(jokers[i + 1])) as Joker;
       jokers[i].edition = blueprintEdition;
     }
+
+    if (joker.name === 'Brainstorm' && jokers[0].name !== 'Brainstorm') {
+      const brainstormEdition = joker.edition;
+      jokers[i] = JSON.parse(JSON.stringify(jokers[0])) as Joker;
+      jokers[i].edition = brainstormEdition;
+    }
   });
+
   let levelIndex = 0;
   chipsAndMultArray.forEach((v, i) => {
     if (v[0] === handType) {
