@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { Joker } from '../helpers/joker';
 import JokerSelector from '../joker-selector/joker-selector';
+import { Suit } from '../helpers/poker-card';
 
 function Jokers({ jokers, updateJokers }: { jokers: Joker[]; updateJokers: (jokers: Joker[]) => void }) {
   const [open, setOpen] = useState(false);
@@ -56,6 +57,28 @@ function Jokers({ jokers, updateJokers }: { jokers: Joker[]; updateJokers: (joke
                     />
                     <label className="sr-only" htmlFor={`'joker-number-'${i}`}>
                       current number
+                    </label>
+                  </div>
+                )}
+                {joker.name === 'Ancient Joker' && (
+                  <div className="absolute top-0 left-0 w-full text-white bg-red-900 rounded-lg text-center">
+                    <select
+                      className="w-full bg-red-900 rounded-lg text-center"
+                      id={`'joker-suit-'${i}`}
+                      value={joker.ancientJokerSuit}
+                      onChange={(e: ChangeEvent) => {
+                        const newJokers = JSON.parse(JSON.stringify(jokers)) as Joker[];
+                        newJokers[i].ancientJokerSuit = (e.target as HTMLInputElement).value as Suit;
+                        updateJokers(newJokers);
+                      }}
+                    >
+                      <option value="spades">Spades</option>
+                      <option value="hearts">Hearts</option>
+                      <option value="clubs">Clubs</option>
+                      <option value="diamonds">Diamonds</option>
+                    </select>
+                    <label className="sr-only" htmlFor={`'joker-suit-'${i}`}>
+                      current suit
                     </label>
                   </div>
                 )}

@@ -1,6 +1,6 @@
 import { useRef, useEffect, ChangeEvent, FormEvent, useState } from 'react';
 import { createDropdown } from '../card-selector/card-selector';
-import { Edition } from '../helpers/poker-card';
+import { Edition, Suit } from '../helpers/poker-card';
 import {
   Joker,
   allJokerNames,
@@ -71,6 +71,7 @@ function JokerSelector({ open, onSelect }: { open: boolean; onSelect: (joker: Jo
                 title={name}
                 onClick={() => {
                   let specialConditionMet, specialNumber;
+                  let ancientJokerSuit: Suit | undefined = undefined;
                   if (jokerWithSpecialConditions.includes(name)) {
                     specialConditionMet = false;
                   }
@@ -80,7 +81,10 @@ function JokerSelector({ open, onSelect }: { open: boolean; onSelect: (joker: Jo
                   if (jokerWithSpecialNumbersStartingAtOne.includes(name)) {
                     specialNumber = 1;
                   }
-                  onSelect({ name, edition, specialNumber, specialConditionMet });
+                  if (name === 'Ancient Joker') {
+                    ancientJokerSuit = 'spades';
+                  }
+                  onSelect({ name, edition, specialNumber, specialConditionMet, ancientJokerSuit });
                 }}
               >
                 <img src={`./jokers/${name}.webp`} alt={name} />

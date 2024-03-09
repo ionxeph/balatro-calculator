@@ -1,4 +1,4 @@
-import { Edition } from './poker-card';
+import { Edition, Suit } from './poker-card';
 
 export type JokerName =
   | 'placeholder' // for unincluded jokers that have edition
@@ -131,7 +131,13 @@ export type JokerName =
   | 'Triboulet'
   | 'Yorick';
 
-export type Joker = { name: JokerName; edition: Edition; specialNumber?: number; specialConditionMet?: boolean };
+export type Joker = {
+  name: JokerName;
+  edition: Edition;
+  specialNumber?: number;
+  specialConditionMet?: boolean;
+  ancientJokerSuit?: Suit;
+};
 
 export const allJokerNames: JokerName[] = [
   'placeholder',

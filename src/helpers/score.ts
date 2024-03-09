@@ -237,7 +237,9 @@ export function getScore(
             }
             break;
           case 'Ancient Joker':
-            // TODO
+            if (card.getSuit(hasSmearedJoker).includes(joker.ancientJokerSuit!)) {
+              mult *= 1.5;
+            }
             break;
           case 'Walkie Talkie':
             if (card.getRank() === 10 || card.getRank() === 4) {
@@ -315,7 +317,6 @@ export function getScore(
     }
   });
 
-  // TODO: jokers
   jokers.forEach((joker) => {
     switch (joker.name) {
       case 'Joker':
