@@ -268,6 +268,11 @@ export function getScore(
           case 'The Idol':
             // TODO
             break;
+          case 'Triboulet':
+            if (card.getRank() === 12 || card.getRank() === 13) {
+              mult *= 2;
+            }
+            break;
           default:
             break;
         }
@@ -558,6 +563,22 @@ export function getScore(
         break;
       case 'Stuntman':
         chips += 300;
+        break;
+      case "Driver's License":
+        if (joker.specialConditionMet) {
+          mult *= 3;
+        }
+        break;
+      case 'Bootstraps':
+        mult += joker.specialNumber!;
+        break;
+      case 'Canio':
+        mult *= joker.specialNumber!;
+        break;
+      case 'Yorick':
+        if (joker.specialConditionMet) {
+          mult *= 5;
+        }
         break;
       default:
         break;

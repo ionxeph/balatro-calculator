@@ -310,7 +310,14 @@ export const jokerWithSpecialNumbersStartingAtOne: JokerName[] = [
   'Canio',
 ];
 
-export const jokerWithSpecialConditions: JokerName[] = ['Loyalty Card', 'Blackboard', 'Card Sharp', 'Bloodstone'];
+export const jokerWithSpecialConditions: JokerName[] = [
+  'Loyalty Card',
+  'Blackboard',
+  'Card Sharp',
+  'Bloodstone',
+  "Driver's License",
+  'Yorick',
+];
 
 export const cardPlayedJokerNames: JokerName[] = [
   'Greedy Joker',
