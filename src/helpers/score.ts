@@ -118,9 +118,11 @@ export function getScore(
     }
   });
   let [chips, mult] = getBaseChipsAndMultBasedOnLevel(hand.getHandType(), levels[levelIndex]);
-  const scoringCards = includesCertainJoker(jokers, 'Splash')
-    ? hand.cards.map((card) => card)
-    : hand.cards.filter((card) => card.isScoring);
+  const scoringCards = (
+    includesCertainJoker(jokers, 'Splash')
+      ? hand.cards.map((card) => card)
+      : hand.cards.filter((card) => card.isScoring)
+  ).filter((card) => !card.isDebuffed);
   let photographTriggered = false;
 
   const hasSmearedJoker = includesCertainJoker(jokers, 'Smeared Joker');

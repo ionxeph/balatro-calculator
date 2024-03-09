@@ -153,6 +153,20 @@ function App() {
                       false
                     )}
                   </div>
+                  <div className="mb-1 flex justify-center">
+                    <input
+                      id={`debuffed-${i}`}
+                      type="checkbox"
+                      checked={card.isDebuffed}
+                      onChange={() => {
+                        card.isDebuffed = !card.isDebuffed;
+                        setHand(new Hand(hand.cards, hand.jokers));
+                      }}
+                    />
+                    <label className="ml-1" htmlFor={`debuffed-${i}`}>
+                      debuffed
+                    </label>
+                  </div>
                   {card.enhancement === 'lucky' && (
                     <div className="flex justify-center">
                       <input
