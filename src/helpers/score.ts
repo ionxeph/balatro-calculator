@@ -1,5 +1,5 @@
 import { Hand, HandType } from './hand';
-import { Joker, JokerName } from './joker';
+import { includesCertainJoker } from './joker';
 
 // chips and mults are represented as [chips, mult]
 export const baseChipsAndMult = new Map<HandType, [number, number]>([
@@ -89,11 +89,11 @@ export function getScore(
   levels: number[],
   steelCardCount: number,
   steelRedSealCount: number,
-  jokers: Joker[],
   hands: number,
   discards: number
 ): [number, number, number] {
   const handType = hand.getHandType();
+  const jokers = hand.jokers;
   let levelIndex = 0;
   chipsAndMultArray.forEach((v, i) => {
     if (v[0] === handType) {
@@ -315,7 +315,6 @@ export function getScore(
         }
         break;
       case 'Four Fingers':
-        // TODO: add special hand type rules
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
@@ -468,7 +467,6 @@ export function getScore(
         }
         break;
       case 'Shortcut':
-        // TODO
         if (includesCertainJoker(jokers, 'Baseball Card')) {
           mult *= 1.5;
         }
@@ -554,11 +552,4 @@ export function getScore(
     }
   });
   return [chips, mult, chips * mult];
-}
-
-function includesCertainJoker(jokers: Joker[], name: JokerName): boolean {
-  if (jokers.filter((j) => j.name === name).length > 0) {
-    return true;
-  }
-  return false;
 }

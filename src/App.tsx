@@ -16,16 +16,15 @@ function App() {
   const [discards, setDiscards] = useState(0);
   const [steelCardCount, setSteelCardCount] = useState(0);
   const [steelRedSealCount, setSteelRedSealCount] = useState(0);
-  const [jokers, setJokers] = useState<Joker[]>([]);
 
   return (
     <>
       <div className="grid gap-6 grid-cols-8 text-white">
         <div className="col-span-5">
           <Jokers
-            jokers={jokers}
+            jokers={hand ? hand.jokers : []}
             updateJokers={(jokers: Joker[]) => {
-              setJokers(jokers);
+              setHand(new Hand(hand ? hand.cards : [], jokers));
             }}
           />
         </div>
@@ -100,7 +99,6 @@ function App() {
                       levels,
                       steelCardCount,
                       steelRedSealCount,
-                      jokers,
                       hands,
                       discards
                     );
@@ -122,7 +120,7 @@ function App() {
                       ['none', 'bonus', 'mult', 'wild', 'glass', 'stone', 'lucky'],
                       (e: ChangeEvent) => {
                         hand.cards[i].enhancement = (e.target as HTMLSelectElement).value as Enhancement;
-                        setHand(new Hand(hand.cards));
+                        setHand(new Hand(hand.cards, hand.jokers));
                       },
                       false
                     )}
@@ -135,7 +133,7 @@ function App() {
                       ['base', 'foil', 'holographic', 'polychrome'],
                       (e: ChangeEvent) => {
                         hand.cards[i].edition = (e.target as HTMLSelectElement).value as Edition;
-                        setHand(new Hand(hand.cards));
+                        setHand(new Hand(hand.cards, hand.jokers));
                       },
                       false
                     )}
@@ -148,7 +146,7 @@ function App() {
                       ['none', 'red'],
                       (e: ChangeEvent) => {
                         hand.cards[i].seal = (e.target as HTMLSelectElement).value as Seal;
-                        setHand(new Hand(hand.cards));
+                        setHand(new Hand(hand.cards, hand.jokers));
                       },
                       false
                     )}
@@ -161,7 +159,7 @@ function App() {
                         checked={card.isLucky}
                         onChange={() => {
                           card.isLucky = !card.isLucky;
-                          setHand(new Hand(hand.cards));
+                          setHand(new Hand(hand.cards, hand.jokers));
                         }}
                       />
                       <label className="ml-1" htmlFor={`is-lucky-${i}`}>
@@ -187,7 +185,7 @@ function App() {
                         const tempCard = hand.cards[i];
                         hand.cards[i] = hand.cards[i - 1];
                         hand.cards[i - 1] = tempCard;
-                        setHand(new Hand(hand.cards));
+                        setHand(new Hand(hand.cards, hand.jokers));
                       }}
                     >
                       <span>&lt;--</span>
@@ -200,7 +198,7 @@ function App() {
                         const tempCard = hand.cards[i];
                         hand.cards[i] = hand.cards[i + 1];
                         hand.cards[i + 1] = tempCard;
-                        setHand(new Hand(hand.cards));
+                        setHand(new Hand(hand.cards, hand.jokers));
                       }}
                     >
                       <span>--&gt;</span>
@@ -209,7 +207,7 @@ function App() {
                       className="hidden absolute bottom-0 w-full h-1/3 bg-red-400 opacity-70 group-hover:block"
                       onClick={() => {
                         const cards = hand.cards.filter((_, index) => index !== i);
-                        setHand(new Hand(cards));
+                        setHand(new Hand(cards, hand.jokers));
                       }}
                     >
                       <span>DELETE</span>
@@ -235,7 +233,7 @@ function App() {
               setSelectorOpen(false);
               const cards = hand ? hand.cards : [];
               cards.push(card);
-              setHand(new Hand(cards));
+              setHand(new Hand(cards, hand ? hand.jokers : []));
             }}
           />
         </div>

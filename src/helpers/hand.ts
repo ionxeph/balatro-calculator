@@ -1,3 +1,4 @@
+import { Joker, includesCertainJoker } from './joker';
 import { PokerCard } from './poker-card';
 
 export type HandType =
@@ -43,9 +44,11 @@ export class Hand {
   };
   highestRankRepeat = 0;
   handType: HandType = 'High Card';
+  jokers: Joker[];
 
-  constructor(cards: PokerCard[]) {
+  constructor(cards: PokerCard[], jokers: Joker[]) {
     this.cards = cards;
+    this.jokers = jokers;
     this.init();
   }
 
@@ -88,12 +91,18 @@ export class Hand {
       case 'Flush Five':
       case 'Flush House':
       case 'Five of a Kind':
+      case 'Full House':
+        this.cards.forEach((card) => (card.isScoring = true));
+        break;
+      case 'Straight':
       case 'Royal Flush':
       case 'Straight Flush':
       case 'Flush':
-      case 'Full House':
-      case 'Straight':
-        this.cards.forEach((card) => (card.isScoring = true));
+        if (includesCertainJoker(this.jokers, 'Four Fingers')) {
+          // TODO
+        } else {
+          this.cards.forEach((card) => (card.isScoring = true));
+        }
         break;
       case 'Four of a Kind':
         this.cards.forEach((card) => {
@@ -155,7 +164,13 @@ export class Hand {
 
     const isStraight = this.isStraight();
     if (isStraight && isFlush) {
-      if (this.ranks.includes(1) && this.ranks.includes(10)) {
+      if (
+        this.ranks.includes(1) &&
+        this.ranks.includes(10) &&
+        this.ranks.includes(11) &&
+        this.ranks.includes(12) &&
+        this.ranks.includes(13)
+      ) {
         return 'Royal Flush';
       }
 
@@ -216,7 +231,9 @@ export class Hand {
   }
 
   isStraight(): boolean {
-    if (this.cards.length < 5 || this.highestRankRepeat > 1 || this.suitsCount.none > 0) {
+    const hasFourFingers = includesCertainJoker(this.jokers, 'Four Fingers');
+    const hasShortcut = includesCertainJoker(this.jokers, 'Shortcut');
+    if (this.cards.filter((card) => card.getBaseChips() !== 50).length < (hasFourFingers ? 4 : 5)) {
       return false;
     }
 
@@ -228,6 +245,8 @@ export class Hand {
       }
       if (ranks.includes(rank)) {
         return checkConsecutive(rank - 1, count + 1, ranks);
+      } else if (hasShortcut && ranks.includes(rank - 1)) {
+        return checkConsecutive(rank - 2, count + 1, ranks);
       } else {
         return count;
       }
@@ -238,8 +257,6 @@ export class Hand {
       if (rank === 1) {
         // treat ace as "14"
         consecutive = checkConsecutive(13, 0, this.ranks);
-      } else if (rank < 5) {
-        consecutive = 0;
       } else {
         consecutive = checkConsecutive(rank - 1, 0, this.ranks);
       }
@@ -247,7 +264,8 @@ export class Hand {
         longest = consecutive;
       }
     });
-    return longest === 4;
+    console.log(longest);
+    return longest >= (hasFourFingers ? 3 : 4);
   }
 
   isFullHouse(): boolean {
@@ -270,16 +288,17 @@ export class Hand {
   }
 
   isFlush(): boolean {
-    if (this.cards.length < 5 || this.suitsCount.none > 0) {
+    const hasFourFingers = includesCertainJoker(this.jokers, 'Four Fingers');
+    if (this.cards.filter((card) => card.getBaseChips() !== 50).length < (hasFourFingers ? 4 : 5)) {
       return false;
     }
-    let numberOfUniqueSuits = 0;
+    let highestSuitCount = 0;
     Object.keys(this.suitsCount).forEach((suit) => {
-      if (this.suitsCount[suit] > 0) {
-        numberOfUniqueSuits++;
+      if (this.suitsCount[suit] > highestSuitCount) {
+        highestSuitCount = this.suitsCount[suit];
       }
     });
-    if (numberOfUniqueSuits < 2) {
+    if (highestSuitCount >= (hasFourFingers ? 4 : 5)) {
       return true;
     }
     return false;

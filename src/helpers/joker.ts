@@ -420,3 +420,10 @@ export const uncommonJokerNames: JokerName[] = [
   'Astronomer',
   'Burnt Joker',
 ];
+
+export function includesCertainJoker(jokers: Joker[], name: JokerName): boolean {
+  if (jokers.filter((j) => j.name === name).length > 0) {
+    return true;
+  }
+  return false;
+}
