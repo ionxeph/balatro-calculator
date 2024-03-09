@@ -137,6 +137,7 @@ export type Joker = {
   specialNumber?: number;
   specialConditionMet?: boolean;
   ancientJokerSuit?: Suit;
+  idolCardId?: number;
 };
 
 export const allJokerNames: JokerName[] = [

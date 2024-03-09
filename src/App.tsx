@@ -154,7 +154,7 @@ function App() {
                     )}
                   </div>
                   {card.enhancement === 'lucky' && (
-                    <div className="flex justify-center mt-3">
+                    <div className="flex justify-center">
                       <input
                         id={`is-lucky-${i}`}
                         type="checkbox"

@@ -72,6 +72,7 @@ function JokerSelector({ open, onSelect }: { open: boolean; onSelect: (joker: Jo
                 onClick={() => {
                   let specialConditionMet, specialNumber;
                   let ancientJokerSuit: Suit | undefined = undefined;
+                  let idolCardId: number | undefined = undefined;
                   if (jokerWithSpecialConditions.includes(name)) {
                     specialConditionMet = false;
                   }
@@ -84,7 +85,10 @@ function JokerSelector({ open, onSelect }: { open: boolean; onSelect: (joker: Jo
                   if (name === 'Ancient Joker') {
                     ancientJokerSuit = 'spades';
                   }
-                  onSelect({ name, edition, specialNumber, specialConditionMet, ancientJokerSuit });
+                  if (name === 'The Idol') {
+                    idolCardId = 1;
+                  }
+                  onSelect({ name, edition, specialNumber, specialConditionMet, ancientJokerSuit, idolCardId });
                 }}
               >
                 <img src={`./jokers/${name}.webp`} alt={name} />

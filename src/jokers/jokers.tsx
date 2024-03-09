@@ -1,10 +1,13 @@
 import { ChangeEvent, useState } from 'react';
 import { Joker } from '../helpers/joker';
 import JokerSelector from '../joker-selector/joker-selector';
-import { Suit } from '../helpers/poker-card';
+import { PokerCard, Suit } from '../helpers/poker-card';
+import Card from '../card/card';
+import CardSelector from '../card-selector/card-selector';
 
 function Jokers({ jokers, updateJokers }: { jokers: Joker[]; updateJokers: (jokers: Joker[]) => void }) {
   const [open, setOpen] = useState(false);
+  const [cardSelectorOpen, setCardSelectorOpen] = useState(false);
 
   return (
     <>
@@ -80,6 +83,28 @@ function Jokers({ jokers, updateJokers }: { jokers: Joker[]; updateJokers: (joke
                     <label className="sr-only" htmlFor={`'joker-suit-'${i}`}>
                       current suit
                     </label>
+                  </div>
+                )}
+                {joker.name === 'The Idol' && joker.idolCardId && (
+                  <div className="absolute top-0 left-0 w-full text-white bg-red-900 rounded-lg text-center overflow-hidden h-1/3  border-blue-500 border-2">
+                    <button
+                      className="w-full bg-red-900 rounded-lg text-center"
+                      title="change card"
+                      onClick={() => setCardSelectorOpen(true)}
+                    >
+                      <Card card={new PokerCard(joker.idolCardId, 'none', 'base', 'none')} />
+                      <span className="sr-only">change card</span>
+                    </button>
+                    <CardSelector
+                      idol={true}
+                      open={cardSelectorOpen}
+                      onSelect={(card: PokerCard) => {
+                        const newJokers = JSON.parse(JSON.stringify(jokers)) as Joker[];
+                        newJokers[i].idolCardId = card.id;
+                        updateJokers(newJokers);
+                        setCardSelectorOpen(false);
+                      }}
+                    />
                   </div>
                 )}
                 <button

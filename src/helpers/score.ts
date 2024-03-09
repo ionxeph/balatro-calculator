@@ -268,7 +268,9 @@ export function getScore(
             }
             break;
           case 'The Idol':
-            // TODO
+            if (card.enhancement !== 'stone' && card.id === joker.idolCardId) {
+              mult *= 2;
+            }
             break;
           case 'Triboulet':
             if (card.getRank() === 12 || card.getRank() === 13) {
