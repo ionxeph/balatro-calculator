@@ -156,25 +156,26 @@ export function getScore(
       }
       chips += totalChips;
 
+      const hasSmearedJoker = includesCertainJoker(jokers, 'Smeared Joker');
       jokers.forEach((joker) => {
         switch (joker.name) {
           case 'Greedy Joker':
-            if (card.getSuit() === 'diamonds') {
+            if (card.getSuit(hasSmearedJoker).includes('diamonds')) {
               mult += 4;
             }
             break;
           case 'Lusty Joker':
-            if (card.getSuit() === 'hearts') {
+            if (card.getSuit(hasSmearedJoker).includes('hearts')) {
               mult += 4;
             }
             break;
           case 'Wrathful Joker':
-            if (card.getSuit() === 'spades') {
+            if (card.getSuit(hasSmearedJoker).includes('spades')) {
               mult += 4;
             }
             break;
           case 'Gluttonous Joker':
-            if (card.getSuit() === 'clubs') {
+            if (card.getSuit(hasSmearedJoker).includes('clubs')) {
               mult += 4;
             }
             break;

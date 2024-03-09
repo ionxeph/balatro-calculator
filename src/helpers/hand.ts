@@ -59,8 +59,10 @@ export class Hand {
 
   init() {
     this.cards.forEach((card) => {
-      const suit = card.getSuit();
-      this.suitsCount[suit]++;
+      const suits = card.getSuit(includesCertainJoker(this.jokers, 'Smeared Joker'));
+      suits.forEach((suit) => {
+        this.suitsCount[suit]++;
+      });
       this.rankCount[card.getRank()]++;
     });
     this.ranks = this.cards.map((card) => card.getRank());

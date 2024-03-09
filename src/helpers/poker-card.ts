@@ -43,21 +43,33 @@ export class PokerCard {
     return this.id % 13;
   }
 
-  getSuit(): Suit {
+  getSuit(hasSmearedJoker: boolean): Suit[] {
     if (this.enhancement === 'stone') {
-      return 'none';
+      return ['none'];
     }
     const suitNbr = this.id / 13;
     if (suitNbr <= 1) {
-      return 'spades';
+      if (this.enhancement === 'wild') {
+        return ['spades', 'hearts', 'clubs', 'diamonds'];
+      }
+      return hasSmearedJoker ? ['spades', 'clubs'] : ['spades'];
     }
     if (suitNbr <= 2) {
-      return 'hearts';
+      if (this.enhancement === 'wild') {
+        return ['hearts', 'clubs', 'diamonds', 'spades'];
+      }
+      return hasSmearedJoker ? ['hearts', 'diamonds'] : ['hearts'];
     }
     if (suitNbr <= 3) {
-      return 'clubs';
+      if (this.enhancement === 'wild') {
+        return ['clubs', 'hearts', 'diamonds', 'spades'];
+      }
+      return hasSmearedJoker ? ['clubs', 'spades'] : ['clubs'];
     }
-    return 'diamonds';
+    if (this.enhancement === 'wild') {
+      return ['diamonds', 'clubs', 'hearts', 'spades'];
+    }
+    return hasSmearedJoker ? ['diamonds', 'hearts'] : ['diamonds'];
   }
 
   getBaseChips(): number {
@@ -74,7 +86,7 @@ export class PokerCard {
   }
 
   getImageName(): string {
-    const suit = this.getSuit();
+    const suit = this.getSuit(false)[0];
     const rank = this.getRank();
     switch (rank) {
       case -1:
