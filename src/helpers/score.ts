@@ -1,5 +1,5 @@
 import { Hand, HandType } from './hand';
-import { includesCertainJoker } from './joker';
+import { includesCertainJoker, uncommonJokerNames } from './joker';
 
 // chips and mults are represented as [chips, mult]
 export const baseChipsAndMult = new Map<HandType, [number, number]>([
@@ -310,25 +310,9 @@ export function getScore(
         break;
       case 'Joker Stencil':
         mult *= joker.specialNumber!;
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'Four Fingers':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'Mime':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
         break;
       case 'Ceremonial Dagger':
         mult += joker.specialNumber!;
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
         break;
       case 'Banner':
         chips += discards * 40;
@@ -338,53 +322,22 @@ export function getScore(
           mult += 15;
         }
         break;
-      case 'Marble Joker':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
       case 'Loyalty Card':
         if (joker.specialConditionMet) {
           mult *= 4;
-        }
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
         }
         break;
       case 'Misprint':
         mult += joker.specialNumber!;
         break;
-      case 'Dusk':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
       case 'Raised Fist':
         mult += joker.specialNumber!;
         break;
-      case 'Fibonacci':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
       case 'Steel Joker':
         mult *= joker.specialNumber!;
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
         break;
       case 'Abstract Joker':
         mult += 3 * jokers.length;
-        break;
-      case 'Hack':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'Pareidolia':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
         break;
       case 'Gros Michel':
         mult += 15;
@@ -395,22 +348,9 @@ export function getScore(
       case 'Ride the Bus':
         mult += joker.specialNumber!;
         break;
-      case 'Space Joker':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'Burglar':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
       case 'Blackboard':
         if (joker.specialConditionMet) {
           mult *= 3;
-        }
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
         }
         break;
       case 'Runner':
@@ -424,15 +364,9 @@ export function getScore(
         break;
       case 'Constellation':
         mult *= joker.specialNumber!;
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
         break;
       case 'Hiker':
         chips += joker.specialNumber!;
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
         break;
       case 'Green Joker':
         mult += joker.specialNumber!;
@@ -444,96 +378,47 @@ export function getScore(
         if (joker.specialConditionMet) {
           mult *= 3;
         }
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
         break;
       case 'Red Card':
         mult += joker.specialNumber!;
         break;
       case 'Madness':
         mult *= joker.specialNumber!;
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
         break;
       case 'Square Joker':
         chips += joker.specialNumber!;
         break;
       case 'Vampire':
         mult *= joker.specialNumber!;
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'Shortcut':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
         break;
       case 'Hologram':
         mult *= joker.specialNumber!;
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'Vagabond':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'Cloud 9':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'Rocket':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
         break;
       case 'Obelisk':
         mult *= joker.specialNumber!;
         break;
-      case 'Midas Mask':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'Luchador':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'Gift Card':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'Turtle Bean':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
       case 'Erosion':
         mult += joker.specialNumber!;
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'Reserved Parking':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
-        break;
-      case 'To the Moon':
-        if (includesCertainJoker(jokers, 'Baseball Card')) {
-          mult *= 1.5;
-        }
         break;
       case 'Fortune Teller':
         mult += joker.specialNumber!;
         break;
+      case 'Stone Joker':
+        chips += 25 * joker.specialNumber!;
+        break;
+      case 'Lucky Cat':
+        mult *= joker.specialNumber!;
+        break;
+      case 'Bull':
+        chips += joker.specialNumber!;
+        break;
+      case 'Flash Card':
+        mult += joker.specialNumber!;
+        break;
+      case 'Popcorn':
+        mult += joker.specialNumber!;
+        break;
+
       default:
         break;
     }
@@ -549,6 +434,10 @@ export function getScore(
         break;
       default:
         break;
+    }
+    // Baseball Card handling
+    if (includesCertainJoker(jokers, 'Baseball Card') && uncommonJokerNames.includes(joker.name)) {
+      mult *= 1.5;
     }
   });
   return [chips, mult, chips * mult];

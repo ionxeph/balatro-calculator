@@ -102,7 +102,9 @@ function App() {
                       hands,
                       discards
                     );
-                    return `${Math.round(chips)} * ${Math.round(mult)} = ${Math.round(score)}`;
+                    return `${Math.round(chips * 10) / 10} * ${
+                      mult < 100 ? Math.round(mult * 10) / 10 : Math.round(mult)
+                    } = ${Math.round(score)}`;
                   })()}
                 </p>
               </>
