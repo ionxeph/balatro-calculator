@@ -230,6 +230,7 @@ function App() {
           </div>
 
           <CardSelector
+            idol={false}
             open={selectorOpen}
             onSelect={(card: PokerCard) => {
               setSelectorOpen(false);

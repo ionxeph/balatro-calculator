@@ -64,15 +64,7 @@ export const createDropdown = (
     </>
   );
 
-function CardSelector({
-  open,
-  onSelect,
-  idol = false,
-}: {
-  open: boolean;
-  onSelect: (card: PokerCard) => void;
-  idol: boolean;
-}) {
+function CardSelector({ open, onSelect, idol }: { open: boolean; onSelect: (card: PokerCard) => void; idol: boolean }) {
   const [enhancement, setEnhancement] = useState<Enhancement>('none');
   const [edition, setEdition] = useState<Edition>('base');
   const [seal, setSeal] = useState<Seal>('none');

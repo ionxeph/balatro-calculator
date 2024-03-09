@@ -6,5 +6,8 @@ import './index.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
+    <p className="text-red-300 mt-10">
+      Disclaimer: I made this mostly for myself and I can't guarantee user friendliness or score calculation accuracy.
+    </p>
+  </React.StrictMode>
 );
