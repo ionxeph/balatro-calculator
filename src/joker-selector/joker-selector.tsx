@@ -67,7 +67,7 @@ function JokerSelector({ open, onSelect }: { open: boolean; onSelect: (joker: Jo
             .map((name, i) => (
               <button
                 key={i}
-                className="justify-self-center"
+                className="justify-self-center relative"
                 title={name}
                 onClick={() => {
                   let specialConditionMet, specialNumber;
@@ -91,7 +91,12 @@ function JokerSelector({ open, onSelect }: { open: boolean; onSelect: (joker: Jo
                   onSelect({ name, edition, specialNumber, specialConditionMet, ancientJokerSuit, idolCardId });
                 }}
               >
-                <img src={`./jokers/${name}.webp`} alt={name} />
+                {name === 'placeholder' && (
+                  <div className="absolute top-1/2 w-full text-white bg-orange-800 rounded-lg text-center">
+                    placeholder
+                  </div>
+                )}
+                <img src={`./jokers/${name === 'placeholder' ? 'Joker' : name}.webp`} alt={name} />
               </button>
             ))}
         </div>

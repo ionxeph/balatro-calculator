@@ -33,7 +33,16 @@ function Jokers({ jokers, updateJokers }: { jokers: Joker[]; updateJokers: (joke
                 className="group w-28 min-w-28 h-36 self-center flex relative"
                 title={`${joker.edition.toUpperCase()} ${joker.name}`}
               >
-                <img className="m-auto" src={`./jokers/${joker.name}.webp`} alt={joker.name} />
+                <img
+                  className="m-auto"
+                  src={`./jokers/${joker.name === 'placeholder' ? 'Joker' : joker.name}.webp`}
+                  alt={joker.name}
+                />
+                {joker.name === 'placeholder' && (
+                  <div className="absolute top-1/2 w-full text-white bg-orange-800 rounded-lg text-center">
+                    placeholder
+                  </div>
+                )}
                 {joker.specialConditionMet !== undefined && (
                   <div className="absolute top-0 left-0 w-full text-white bg-red-900 rounded-lg text-center">
                     <input
