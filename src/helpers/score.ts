@@ -114,6 +114,12 @@ export function getScore(
     if (includesCertainJoker(jokers, 'Hack') && hackRetriggers.includes(card.getRank())) {
       numberOfRetriggers++;
     }
+    if (includesCertainJoker(jokers, 'Seltzer')) {
+      numberOfRetriggers++;
+    }
+    if (includesCertainJoker(jokers, 'Sock and Buskin') && card.isFace(includesCertainJoker(jokers, 'Pareidolia'))) {
+      numberOfRetriggers++;
+    }
 
     for (let i = 0; i < numberOfRetriggers; i++) {
       let totalChips = card.getBaseChips();
@@ -203,6 +209,17 @@ export function getScore(
             if (!photographTriggered && card.isFace(includesCertainJoker(jokers, 'Pareidolia'))) {
               mult *= 2;
               photographTriggered = true;
+            }
+            break;
+          case 'Walkie Talkie':
+            if (card.getRank() === 10 || card.getRank() === 4) {
+              chips += 10;
+              mult += 4;
+            }
+            break;
+          case 'Smiley Face':
+            if (card.isFace(includesCertainJoker(jokers, 'Pareidolia'))) {
+              mult += 4;
             }
             break;
           default:
@@ -418,7 +435,29 @@ export function getScore(
       case 'Popcorn':
         mult += joker.specialNumber!;
         break;
-
+      case 'Spare Trousers':
+        mult += joker.specialNumber!;
+        break;
+      case 'Ancient Joker':
+        // TODO
+        break;
+      case 'Ramen':
+        mult *= joker.specialNumber!;
+        break;
+      case 'Castle':
+        chips += joker.specialNumber!;
+        break;
+      case 'Campfire':
+        mult *= joker.specialNumber!;
+        break;
+      case 'Acrobat':
+        if (hands === 1) {
+          mult *= 3;
+        }
+        break;
+      case 'Swashbuckler':
+        mult += joker.specialNumber!;
+        break;
       default:
         break;
     }
