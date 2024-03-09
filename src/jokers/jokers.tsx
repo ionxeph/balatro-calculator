@@ -22,7 +22,11 @@ function Jokers({ jokers, updateJokers }: { jokers: Joker[]; updateJokers: (joke
             Add a joker
           </button>
           {jokers.map((joker, i) => {
-            const isSpecial = joker.specialConditionMet !== undefined || joker.specialNumber !== undefined;
+            const isSpecial =
+              joker.specialConditionMet !== undefined ||
+              joker.specialNumber !== undefined ||
+              joker.name === 'Ancient Joker' ||
+              joker.name === 'The Idol';
             return (
               <div
                 key={i}
