@@ -295,6 +295,12 @@ export function getScore(
 
   jokers.forEach((joker) => {
     switch (joker.name) {
+      case 'Raised Fist':
+        mult += joker.specialNumber!;
+        if (includesCertainJoker(jokers, 'Mime')) {
+          mult += joker.specialNumber!;
+        }
+        break;
       case 'Shoot the Moon':
         for (let i = 0; i < joker.specialNumber!; i++) {
           mult + 13;
@@ -401,9 +407,6 @@ export function getScore(
         }
         break;
       case 'Misprint':
-        mult += joker.specialNumber!;
-        break;
-      case 'Raised Fist':
         mult += joker.specialNumber!;
         break;
       case 'Steel Joker':
