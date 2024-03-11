@@ -132,6 +132,7 @@ export function getScore(
   });
   scoringCards.forEach((card, i) => {
     let numberOfRetriggers = card.seal === 'red' ? 2 : 1;
+    // TODO: add handling for multiple copies of these retrigger jokers
     if (hands === 1 && includesCertainJoker(jokers, 'Dusk')) {
       numberOfRetriggers++;
     }
